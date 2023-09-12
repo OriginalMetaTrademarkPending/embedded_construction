@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include "UART_Driver.h"
 #include "XMEM_Driver.h"
+#include "ADC_Driver.h"
 
 #define FOSC 4915200UL
 #define BAUD 9600UL
@@ -19,6 +20,8 @@ int main(void)
 	USART_Init(MYUBBR);
 	USART_stream_setup();
 	XMEM_init();
+	ADC_init();
 	SRAM_test();
+	ADC_test();
 	return EXIT_SUCCESS;
 }

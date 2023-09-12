@@ -3,7 +3,6 @@
 void XMEM_init(void)
 {
 	MCUCR |= (1<<SRE);
-        SFIOR &= ~(111<<XMM0);
         SFIOR |= (1<<XMM2);
         DDRA |= 0xFF;
 }
