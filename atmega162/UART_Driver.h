@@ -1,4 +1,5 @@
-#pragma once
+#ifndef UART_DRIVER_H
+#define UART_DRIVER_H
 #include <avr/io.h>
 #include "avr/interrupt.h"
 #include <stdint.h>
@@ -34,3 +35,5 @@ int USART_Receive_single(FILE* stream);
  * @return 0 if printf was successful, some value if it wasn't.
 */
 FILE* USART_stream_setup(void);
+
+#endif /*UART_DRIVER_H*/
