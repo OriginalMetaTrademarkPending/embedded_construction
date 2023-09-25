@@ -1,17 +1,56 @@
 #include "ADC.h"
-
+/**
+ * TODO: Find out the reason for line 37...
+ */
 void ADC_init()
 {
-	DDRD |= (1<<PD4);
-	TCCR3A &= ~(1<<COM3A0);
+	DDRD |= (1<<PD4);				//PWM signal for clocking the ADC comes from D4.
+	TCCR3A &= ~(1<<COM3A0);				//Clear the previous Compare Output Mode configuration.
+	
+	/*
+	 * New Compare Output Mode configuration.
+	 *
+	 * Set the Waveform Generation Mode bit 1 to 1.
+	 * Set the Compare Output Mode bit 1 to 1.
+	 */
 	TCCR3A |= (1<<COM3A1 | 1<<WGM31);
-	TCCR3B &= ~(1<<WGM33 | 0b111<<CS30);
+
+	TCCR3B &= ~(1<<WGM33 | 0b111<<CS30);		//Clear the previous Waveform Generation Mode and Clock Prescaler settings.
+	
+	/*
+	 * New Waveform Generation Mode configuration.
+	 *
+	 * Set the Waveform Generation Mode bits 2 and 3 to 1.
+	 * Set the Clock Prescaler to 001 (no prescaling).
+	 */
 	TCCR3B |= (1<<WGM32 | 1<<WGM33 | 0b01 << CS30);
-	ICR3 = 20;
-	while(TCNT3 < 10);
-	OCR3A = 10;
+	ICR3 = 20;					//Using the Input Capture Register 3 for setting the TOP value of the counter.
+	while(TCNT3 < 10);				//??
+	OCR3A = 10;					//Setting the Output Compare Register 3 to 10 (half of TOP value).
 }
 
+
+/**
+ * A lot to go through here...
+ * First and foremost, a clear decision hasn't been made regarding the read strategy.
+ * 
+ * INPUT/OUTPUT MODE vs. HARDWIRED MODE:
+ * Personally, the input/output mode sound much better on paper and is quite interesting in the long run.
+ * By writing the necessary channel that we need, we can effectively use the extra XMEM.
+ * However the configuration is more tricky and the results might be problematic.
+ *
+ * Hardwired Mode on the other hand is quite straightforward and is set up through wiring.
+ * It allows us to read the entire memory block written by the ADC which consists of 4 bytes.
+ * However, we cannot access the channels directly, and we need to somehow pass the result array around
+ * the entire runtime of the function...
+ *
+ * The implementation below needs to change to accomodate the following points:
+ *
+ * 1) Usage of the BUSY pin (mandatory): We want to set up an ISR to take over the reading after the conversion process.
+ *	This makes the reading much cleaner than just waiting for 20 microseconds, big optimization in runtime.
+ * 2) Move to input/output mode (optional): We would appreciate a more configurable solution to the given problem, but
+ *	this is not a mandatory requirement, more of an efficient design question.
+ */
 void ADC_read(uint8_t channel, uint8_t* result)
 {
 	/* Defining the base ADC address. */
@@ -23,12 +62,18 @@ void ADC_read(uint8_t channel, uint8_t* result)
 	/* Delaying for read completion. */
 	_delay_us(20);
 
+	/* Read all the measurements from the ADC. */
 	for(uint8_t i = 0; i < 4; i++)
 	{
 		result[i] = adc_addr[i];
 	}
 }
 
+/**
+ * This part of the code needs to be cleaned up a bit, there are many variables in the stack...
+ * I assume it can be cleaner regarding performance, but in the way it is setup we would reduce
+ * readability and maintainability greatly.
+ */
 void ADC_calibrate(uint8_t* calib_array)
 {
 	uint8_t pos[4];
@@ -97,6 +142,9 @@ void ADC_calibrate(uint8_t* calib_array)
 	}
 }
 
+/*
+ * Not an elegant solution, it works but still...ugly.
+ */
 pos_t pos_read(uint8_t* calib_array)
 {
 	pos_t result;
@@ -137,17 +185,18 @@ pos_t pos_read(uint8_t* calib_array)
 	return result;
 }
 
-joy_dir dir_read(uint8_t* calib_array)
+/*
+ * Don't think there's a better way of doing this unfortunately...thresholding looks like the best way.
+ */
+joy_dir dir_read(pos_t* position)
 {
-	pos_t joy_pos = pos_read(calib_array);
-
-	if(abs(joy_pos.posX_t) > abs(joy_pos.posY_t))
+	if(abs(position->posX_t) > abs(position->posY_t))
 	{
-		if(joy_pos.posX_t >= 20)
+		if((position->posX_t) >= 20)
 		{
 			return RIGHT;
 		}
-		else if(joy_pos.posX_t <= -20)
+		else if((position->posX_t) <= -20)
 		{
 			return LEFT;
 		}
@@ -157,11 +206,11 @@ joy_dir dir_read(uint8_t* calib_array)
 		}
 	}else
 	{
-		if(joy_pos.posY_t >= 20)
+		if((position->posY_t) >= 20)
 		{
 			return UP;
 		}
-		else if(joy_pos.posY_t <= -20)
+		else if((position->posY_t) <= -20)
 		{
 			return DOWN;
 		}
@@ -175,7 +224,7 @@ joy_dir dir_read(uint8_t* calib_array)
 
 const char* joy_dir_to_string(joy_dir direction)
 {
-	switch (direction)
+	switch(direction)
 	{
 		case NEUTRAL: return "NEUTRAL";
 		case LEFT: return "LEFT";

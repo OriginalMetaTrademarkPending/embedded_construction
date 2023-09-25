@@ -8,10 +8,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-#define BASE_ADDR 0x1000
-/**
- * This driver configures the MCU for usage of external SRAM.
- */
+/* This driver configures the MCU for usage of external SRAM. */
 
 /**
  * @brief Initializes the external memory and configures the MCU.

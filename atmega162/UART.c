@@ -67,5 +67,6 @@ int USART_Receive_single(FILE* stream)
  */
 FILE* USART_stream_setup(void)
 {
+	/* Return the fdevopen link to printf. */
 	return fdevopen(USART_Transmit_single, USART_Receive_single);
 }
