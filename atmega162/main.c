@@ -29,14 +29,15 @@ int main(void)
 	while(1)
 	{
 		ADC_read(0, pos);
-		int8_t posX = pos_read(calib_array).posX_t;
-		int8_t posY = pos_read(calib_array).posY_t;
-		joy_dir dirJoy = dir_read(calib_array);
+		pos_t position = pos_read(calib_array);
+		int8_t posX = position.posX_t;
+		int8_t posY = position.posY_t;
+		joy_dir dirJoy = dir_read(&position);
 		printf("Joystick x raw:%d\t", pos[0]);
 		printf("Joystick x percent:%d\n\r", posX);
 		printf("Joystick y raw:%d\t", pos[1]);
 		printf("Joystick y percent:%d\n\r", posY);
-		printf("Joystick direction:%d\n\r", dirJoy);
+		printf("Joystick direction:%s\n\r", joy_dir_to_string(dirJoy));
 		printf("Slider right raw:%d\t", pos[2]);
 		printf("Slider left raw:%d\n\r", pos[3]);
 		printf("\n\r");

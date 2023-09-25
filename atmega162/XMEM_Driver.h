@@ -1,13 +1,11 @@
-#pragma once
+#ifndef XMEM_DRIVER_H
+#define XMEM_DRIVER_H
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-#define BASE_ADDR 0x1000
-/**
- * This driver configures the MCU for usage of external SRAM.
- */
+/* This driver configures the MCU for usage of external SRAM. */
 
 /**
  * @brief Initializes the external memory and configures the MCU.
@@ -40,4 +38,9 @@ void XMEM_write(uint8_t data, uint16_t addr);
  */
 uint8_t XMEM_read(uint16_t addr);
 
+/**
+ * @brief Testing SRAM read and write cycle.
+ */
 void SRAM_test(void);
+
+#endif /*XMEM_DRIVER_H*/

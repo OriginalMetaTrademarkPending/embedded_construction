@@ -1,24 +1,34 @@
 #include "XMEM_Driver.h"
 
+/**
+ * VALIDATED!
+ */
 void XMEM_init(void)
 {
-	MCUCR |= (1<<SRE);
-        SFIOR |= (1<<XMM2);
-        DDRA |= 0xFF;
+    MCUCR |= (1<<SRE);          // XMEM Enable set to 1.
+    SFIOR |= (1<<XMM2);         // XMEM High Mask: mask away the JTAG pins.
+    DDRA |= 0xFF;               // Activate all address pins as outputs.
 }
 
+/**
+ * VALIDATED!
+ */
 void XMEM_write(uint8_t data, uint16_t addr)
 {
-	volatile uint8_t* ext_mem = (uint8_t*)BASE_ADDR;
-        ext_mem[addr] = data;
+    volatile uint8_t* ext_mem = (uint8_t*)0x1800;
+    ext_mem[addr] = data;
 }
 
+/**
+ * VALIDATED!
+ */
 uint8_t XMEM_read(uint16_t addr)
 {
-	volatile uint8_t* ext_mem = (uint8_t*)BASE_ADDR;
+	volatile uint8_t* ext_mem = (uint8_t*)0x1800;
         uint8_t result = ext_mem[addr];
 	return result;
 }
+
 
 void SRAM_test(void)
 {
