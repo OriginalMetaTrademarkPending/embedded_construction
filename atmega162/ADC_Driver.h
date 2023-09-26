@@ -1,4 +1,6 @@
-#pragma once
+#ifndef ADC_DRIVER_H
+#define ADC_DRIVER_H
+#define __AVR_ATmega162__
 #include <avr/io.h>
 #include <stdint.h>
 /* Driver for interfacing with the ADC. */
@@ -60,3 +62,5 @@ joy_dir dir_read(pos_t* position);
  * @return A string literal based on the direction.
  */
 const char* joy_dir_to_string(joy_dir direction);
+
+#endif /* ADC_DRIVER_H */

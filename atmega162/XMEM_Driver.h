@@ -1,5 +1,6 @@
 #ifndef XMEM_DRIVER_H
 #define XMEM_DRIVER_H
+#define __AVR_ATmega162__
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <stdint.h>

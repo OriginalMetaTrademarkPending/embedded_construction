@@ -1,9 +1,16 @@
 #ifndef UART_DRIVER_H
 #define UART_DRIVER_H
+#define __AVR_ATmega162__
 #include <avr/io.h>
 #include "avr/interrupt.h"
 #include <stdint.h>
 #include <stdio.h>
+
+/**
+ * @brief Declaring the UART Interrupt Service Routine for data reception.
+ */
+ISR(USART0_RXC_vect);
+ISR(USART0_UDRE_vect);
 
 /**
 * @brief Initiates the USART module.
