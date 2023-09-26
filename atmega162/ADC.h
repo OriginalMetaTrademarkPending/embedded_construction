@@ -1,5 +1,6 @@
 #ifndef ADC_H
 #define ADC_H
+#define __AVR_ATmega162__
 #include <avr/io.h>
 #include <stdint.h>
 #include <stdio.h>

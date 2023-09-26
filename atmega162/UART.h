@@ -9,6 +9,12 @@
 #include <stdio.h>
 
 /**
+ * @brief Declaring the UART Interrupt Service Routine for data reception.
+ */
+ISR(USART0_RXC_vect);
+ISR(USART0_UDRE_vect);
+
+/**
 * @brief Initiates the USART module.
 * @param ubrr The USART baud rate.
 *
