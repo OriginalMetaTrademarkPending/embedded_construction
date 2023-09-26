@@ -29,7 +29,7 @@ int main(void)
 	SRAM_test();
 	ADC_init();
 	OLED_init();
-	OLED_reset();
+	OLED_clear();
 	ADC_calibrate(calib_array);
 	int selector = 1;
 	int game_done = 1;
@@ -42,8 +42,8 @@ int main(void)
 			if(selector < 1){
 				selector=4;
 			}
-			OLED_clear_column(0, 10);
-			OLED_pos(selector+2, 0);
+			OLED_clear_columns(0, 10);
+			OLED_goto_pos(selector+2, 0);
 			OLED_printf_char('>');
 		}
 		else if (dirJoy==DOWN) {
@@ -51,8 +51,8 @@ int main(void)
 			if (selector>4) {
 				selector = 1;
 			}
-			OLED_clear_column(0, 10);
-			OLED_pos(selector+2, 0);
+			OLED_clear_columns(0, 10);
+			OLED_goto_pos(selector+2, 0);
 			OLED_printf_char('>');
 		}
 		OLED_home(selector);
