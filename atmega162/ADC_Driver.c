@@ -1,13 +1,4 @@
 #include "ADC_Driver.h"
-#include "XMEM_Driver.h"
-#include <stdint.h>
-#include <stdio.h>
-#include <avr/io.h>
-#include <stdlib.h>
-#define ADC_BASE_ADDR 0x1400
-
-#define F_CPU 4915200
-#include <util/delay.h>
 
 void ADC_init()
 {
@@ -179,5 +170,17 @@ joy_dir dir_read(uint8_t* calib_array)
 			return NEUTRAL;
 		}
 
+	}
+}
+
+const char* joy_dir_to_string(joy_dir direction)
+{
+	switch (direction)
+	{
+		case NEUTRAL: return "NEUTRAL";
+		case LEFT: return "LEFT";
+		case RIGHT: return "RIGHT";
+		case UP: return "UP";
+		case DOWN: return "DOWN";
 	}
 }

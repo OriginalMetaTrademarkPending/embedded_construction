@@ -1,5 +1,4 @@
 -Wall
 -L/usr/local/lib
--I/usr/local/include
 -I/lib/avr/include
 -lfmt

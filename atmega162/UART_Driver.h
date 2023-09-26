@@ -1,5 +1,7 @@
-#ifndef UART_DRIVER_H
-#define UART_DRIVER_H
+#pragma once
+#ifndef __AVR_ATmega162__
+#define __AVR_ATmega162__
+#endif /*__AVR_ATmega162__*/
 #include <avr/io.h>
 #include "avr/interrupt.h"
 #include <stdint.h>
@@ -35,5 +37,3 @@ int USART_Receive_single(FILE* stream);
  * @return 0 if printf was successful, some value if it wasn't.
 */
 FILE* USART_stream_setup(void);
-
-#endif /*UART_DRIVER_H*/
