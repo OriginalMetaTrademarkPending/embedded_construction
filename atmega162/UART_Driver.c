@@ -1,6 +1,4 @@
 #include "UART_Driver.h"
-#include <stdint.h>
-
 /**
  * VALIDATED!
  */
