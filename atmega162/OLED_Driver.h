@@ -72,3 +72,13 @@ void OLED_clear_columns(uint8_t start, uint8_t end);
  * @brief The home menu for the game.
  */
 void OLED_home(int state);
+
+/**
+ * @brief The settings menu for the game.
+ */
+void OLED_settings(int state);
+
+/**
+ * @brief The highscores menu for the game.
+ */
+void OLED_highscores(int state, uint8_t* scores);

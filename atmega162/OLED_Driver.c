@@ -134,3 +134,32 @@ void OLED_home(int state)
 	OLED_goto_pos(6, 10);
 	OLED_printf("Quit");
 }
+
+void OLED_settings(int state)
+{
+	OLED_goto_pos(1, 32);
+	OLED_printf("SETTINGS");
+	OLED_goto_pos(3, 10);
+	OLED_printf("Calibrate");
+	OLED_goto_pos(4, 10);
+	OLED_printf("Adjust brightness");
+	OLED_goto_pos(5, 10);
+	OLED_printf("Credits");
+	OLED_goto_pos(6, 10);
+	OLED_printf("Back");
+
+}
+
+void OLED_highscores(int state, uint8_t* scores)
+{
+	OLED_goto_pos(1, 32);
+	OLED_printf("HIGHSCORES");
+	OLED_goto_pos(3, 10);
+	OLED_printf("Placeholder 1");
+	OLED_goto_pos(4, 10);
+	OLED_printf("Placeholder 2");
+	OLED_goto_pos(5, 10);
+	OLED_printf("Placeholder 3");
+	OLED_goto_pos(6, 10);
+	OLED_printf("Back");
+}
