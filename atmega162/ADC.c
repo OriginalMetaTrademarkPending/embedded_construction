@@ -1,4 +1,4 @@
-#include "ADC_Driver.h"
+#include "ADC.h"
 
 void ADC_init()
 {

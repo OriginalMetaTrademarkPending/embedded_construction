@@ -1,5 +1,5 @@
 # List all source files to be compiled; separate with space
-SOURCE_FILES := main.c UART_Driver.c XMEM_Driver.c ADC_Driver.c OLED_Driver.c fonts.c
+SOURCE_FILES := main.c UART.c XMEM.c ADC.c OLED.c fonts.c SPI.c MCP2515.c
 # Set this flag to "yes" (no quotes) to use JTAG; otherwise ISP (SPI) is used
 PROGRAM_WITH_JTAG := yes
 
@@ -10,6 +10,7 @@ ifeq ($(PROGRAM_WITH_JTAG), yes)
 endif
 
 BUILD_DIR := build
+ASSEMBLY_DIR := asm
 TARGET_CPU := atmega162
 TARGET_DEVICE := m162
 
@@ -22,6 +23,9 @@ OBJECT_FILES = $(SOURCE_FILES:%.c=$(BUILD_DIR)/%.o)
 
 $(BUILD_DIR):
 	mkdir $(BUILD_DIR)
+
+$(ASSEMBLY_DIR):
+	mkdir $(ASSEMBLY_DIR)
 
 $(BUILD_DIR)/%.o: %.c | $(BUILD_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -49,4 +53,8 @@ debug:
 	x-terminal-emulator -e avarice --edbg --ignore-intr :4242
 	sleep 2
 	avr-gdb -tui -iex "target remote localhost:4242" $(BUILD_DIR)/a.out
-	killall -s 9 avarice	
+	killall -s 9 avarice
+
+.PHONY: assembly
+assembly: $(BUILD_DIR)/%.o
+	avr-objdump -S -d $^ > $(ASSEMBLY_DIR)/%.dump

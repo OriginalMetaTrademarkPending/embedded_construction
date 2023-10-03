@@ -1,4 +1,5 @@
-#pragma once
+#ifndef UART_H
+#define UART_H
 #ifndef __AVR_ATmega162__
 #define __AVR_ATmega162__
 #endif /*__AVR_ATmega162__*/
@@ -37,3 +38,4 @@ int USART_Receive_single(FILE* stream);
  * @return 0 if printf was successful, some value if it wasn't.
 */
 FILE* USART_stream_setup(void);
+#endif /*UART_H*/

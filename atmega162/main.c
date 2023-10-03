@@ -9,11 +9,13 @@
 #include <util/delay.h>
 #include <stdint.h>
 #include <stdio.h>
-#include "UART_Driver.h"
-#include "XMEM_Driver.h"
-#include "ADC_Driver.h"
-#include "OLED_Driver.h"
+#include "UART.h"
+#include "XMEM.h"
+#include "ADC.h"
+#include "OLED.h"
+#include "SPI.h"
 #include "fonts.h"
+#include "MCP2515.h"
 #define FOSC 4915200UL
 #define BAUD 9600UL
 #define MYUBBR ((FOSC/(16*BAUD))-1)
@@ -30,7 +32,14 @@ int main(void)
 	ADC_init();
 	OLED_init();
 	OLED_clear();
-	ADC_calibrate(calib_array);
+//	ADC_calibrate(calib_array);
+	while(MCP2515_init());
+	uint8_t data;
+	while(1)
+	{
+		MCP2515_write(0x01, 0x55);
+		MCP2515_read(0x01, &data);
+	}
 	int selector = 1;
 	int game_done = 1;
 	while (game_done) 

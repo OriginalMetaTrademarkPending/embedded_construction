@@ -1,11 +1,11 @@
-#pragma once
-#include <stdint.h>
-#include <string.h>
-#include "fonts.h"
+#ifndef OLED_H
+#define OLED_H
 #ifndef __AVR_ATmega162__
 #define __AVR_ATmega162__
 #endif /*__AVR_ATmega162__*/
-
+#include <stdint.h>
+#include <string.h>
+#include "fonts.h"
 /* Driver for the OLED screen.*/
 
 /**
@@ -82,3 +82,5 @@ void OLED_settings(int state);
  * @brief The highscores menu for the game.
  */
 void OLED_highscores(int state, uint8_t* scores);
+
+#endif /*OLED_H*/

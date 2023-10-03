@@ -1,4 +1,4 @@
-#include "XMEM_Driver.h"
+#include "XMEM.h"
 
 void XMEM_init(void)
 {

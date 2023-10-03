@@ -1,4 +1,5 @@
-#pragma once
+#ifndef XMEM_H
+#define XMEM_H
 #ifndef __AVR_ATmega162__
 #define __AVR_ATmega162__
 #endif /*__AVR_ATmega162__*/
@@ -43,4 +44,8 @@ void XMEM_write(uint8_t data, uint16_t addr);
  */
 uint8_t XMEM_read(uint16_t addr);
 
+/**
+ * @brief Test code for SRAM reading and writing integrity.
+ */
 void SRAM_test(void);
+#endif/*XMEM_H*/
