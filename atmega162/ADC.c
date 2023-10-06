@@ -1,12 +1,4 @@
 #include "ADC.h"
-#include "XMEM_Driver.h"
-#include <stdint.h>
-#include <stdio.h>
-#include <avr/io.h>
-#include <stdlib.h>
-
-#define F_CPU 4915200
-#include <util/delay.h>
 
 /**
  * TODO: Find out the reason for line 37...
@@ -80,7 +72,7 @@ void ADC_read(uint8_t channel, uint8_t* result)
 
 /**
  * This part of the code needs to be cleaned up a bit, there are many variables in the stack...
- * I assume it can be cleaner regarding performance, but in the way it is setup we would reduce
+ * I assume it can be cleaner regarding performance, but in the way it is set up we would reduce
  * readability and maintainability greatly.
  */
 void ADC_calibrate(uint8_t* calib_array)

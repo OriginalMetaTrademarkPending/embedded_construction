@@ -18,6 +18,8 @@
 
 int main(void)
 {
-	USART_test(MYUBBR);
+	//USART_test(MYUBBR);
+	//SRAM_test();
+	//ADC_test();
 	return EXIT_SUCCESS;
 }
