@@ -1,5 +1,5 @@
-#ifndef XMEM_DRIVER_H
-#define XMEM_DRIVER_H
+#ifndef XMEM_H
+#define XMEM_H
 #define __AVR_ATmega162__
 #include <avr/io.h>
 #include <avr/interrupt.h>
@@ -44,4 +44,4 @@ uint8_t XMEM_read(uint16_t addr);
  */
 void SRAM_test(void);
 
-#endif /*XMEM_DRIVER_H*/
+#endif /*XMEM_H*/

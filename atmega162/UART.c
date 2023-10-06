@@ -1,5 +1,6 @@
-#include "UART_Driver.h"
+#include "UART.h"
 #include <stdint.h>
+#include <stdio.h>
 
 ISR(USART0_RXC_vect)
 {
@@ -25,6 +26,10 @@ void USART_Init(uint64_t ubrr)
 	/* Configuring the USART module.
 	*  We want 2 stop bits and a data format of 8 bits per package. */
 	UCSR0C = (1<<URSEL0)|(1<<USBS0)|(3<<UCSZ00);
+
+	/* Synchronize the USART line with the IO streams. */
+	USART_stream_setup();
+	sei();
 }
 
 
@@ -66,4 +71,15 @@ FILE* USART_stream_setup(void)
 {
 	/* Return the fdevopen link to printf. */
 	return fdevopen(USART_Transmit_single, USART_Receive_single);
+}
+
+void USART_test(uint64_t ubrr)
+{
+	USART_Init(ubrr);	 // Start the USART module with a given baud rate.
+	char test_data;
+	while(1)
+	{
+		scanf("%c", &test_data);
+		printf("Retrieved data from the USART line: %c", test_data);
+	}
 }

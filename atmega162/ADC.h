@@ -1,5 +1,5 @@
-#ifndef ADC_DRIVER_H
-#define ADC_DRIVER_H
+#ifndef ADC_H
+#define ADC_H
 #define __AVR_ATmega162__
 #include <avr/io.h>
 #include <stdint.h>
@@ -63,4 +63,9 @@ joy_dir dir_read(pos_t* position);
  */
 const char* joy_dir_to_string(joy_dir direction);
 
-#endif /* ADC_DRIVER_H */
+/**
+ * @brief Test function for the ADC module.
+ */
+void ADC_test();
+
+#endif /* ADC_H */

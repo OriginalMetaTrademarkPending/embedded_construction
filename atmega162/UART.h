@@ -1,5 +1,5 @@
-#ifndef UART_DRIVER_H
-#define UART_DRIVER_H
+#ifndef UART_H
+#define UART_H
 #define __AVR_ATmega162__
 #include <avr/io.h>
 #include "avr/interrupt.h"
@@ -43,4 +43,8 @@ int USART_Receive_single(FILE* stream);
 */
 FILE* USART_stream_setup(void);
 
+/**
+ * @brief Test code for the interrupt-based USART routine.
+ */
+void USART_test(uint64_t ubrr);
 #endif /*UART_DRIVER_H*/
