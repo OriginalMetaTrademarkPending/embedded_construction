@@ -223,6 +223,9 @@ joy_dir dir_read(pos_t* position)
 	}
 }
 
+/*
+ * VALIDATED.
+ */
 const char* joy_dir_to_string(joy_dir direction)
 {
 	switch(direction)
