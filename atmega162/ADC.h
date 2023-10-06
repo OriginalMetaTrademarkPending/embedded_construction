@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #define F_CPU 4915200
 #include <util/delay.h>
+#include "XMEM.h"
 /* Driver for interfacing with the ADC. */
 
 /**
@@ -67,4 +68,9 @@ joy_dir dir_read(pos_t* position);
  */
 const char* joy_dir_to_string(joy_dir direction);
 
-#endif /*ADC_H*/
+/**
+ * @brief Test function for the ADC module.
+ */
+void ADC_test();
+
+#endif /* ADC_H */

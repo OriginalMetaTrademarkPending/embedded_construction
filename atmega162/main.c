@@ -16,6 +16,7 @@
 #include "SPI.h"
 #include "fonts.h"
 #include "MCP2515.h"
+
 #define FOSC 4915200UL
 #define BAUD 9600UL
 #define MYUBBR ((FOSC/(16*BAUD))-1)
@@ -44,8 +45,9 @@ int main(void)
 	int game_done = 1;
 	while (game_done) 
 	{
+		pos_t position = pos_read(calib_array);
 		_delay_ms(300);
-		joy_dir dirJoy = dir_read(calib_array);
+		joy_dir dirJoy = dir_read(&position);
 		if(dirJoy==UP){
 			selector -= 1;
 			if(selector < 1){
@@ -85,5 +87,6 @@ int main(void)
 		printf("\n\r");
 		_delay_ms(1000);
 	}
+	USART_test(MYUBBR);
 	return EXIT_SUCCESS;
 }
