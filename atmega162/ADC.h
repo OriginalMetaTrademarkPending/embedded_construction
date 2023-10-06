@@ -3,11 +3,10 @@
 #define __AVR_ATmega162__
 #include <avr/io.h>
 #include <stdint.h>
+#include "XMEM.h"
 #include <stdio.h>
 #include <stdlib.h>
 #define F_CPU 4915200
-#include <util/delay.h>
-#include "XMEM.h"
 /* Driver for interfacing with the ADC. */
 
 /**
@@ -28,7 +27,6 @@ typedef enum {NEUTRAL=0, LEFT, RIGHT, UP, DOWN}joy_dir;
  * @brief Initializes the ADC module.
  */
 void ADC_init(void);
-
 /**
  * @brief Reads a value from the ADC module.
  *
