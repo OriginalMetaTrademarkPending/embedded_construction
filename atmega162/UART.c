@@ -2,12 +2,19 @@
 
 ISR(USART0_RXC_vect)
 {
-	PORTB |= UDR0;
+	unsigned char data = UDR0;
+
+//	if(!((UCSR0A & ((1<<FE0)|(1<<DOR0)|(1<<UPE0))) == 0))
+//	{
+//		//Error occured
+//		UDR0 = 0;
+//	}
 }
 
 ISR(USART0_UDRE_vect)
 {
-	UDR0 = PORTB;
+	volatile char *isr_buffer = (char*)0x100;
+	UDR0 = *isr_buffer;
 	UCSR0B &= ~(1<<UDRIE0);
 }
 
@@ -24,7 +31,7 @@ void USART_Init(uint64_t ubrr)
 	UCSR0B = (1<<RXCIE0)|(1<<RXEN0)|(1<<TXEN0);
 	/* Configuring the USART module.
 	*  We want 2 stop bits and a data format of 8 bits per package. */
-	UCSR0C = (1<<URSEL0)|(1<<USBS0)|(3<<UCSZ00);
+	UCSR0C = (1<<URSEL0)|(3<<UCSZ00);
 
 	/* Synchronize the USART line with the IO streams. */
 	USART_stream_setup();
@@ -41,7 +48,8 @@ int USART_Transmit_single(char ascii_char, FILE* stream)
 	*  If UDRE0 returns a 1, it means the data register is empty.
 	*  At that point, transmit the character. 
 	*/
-	PORTB = ascii_char;
+	volatile char *isr_buffer = (char*)0x100;
+	*isr_buffer = ascii_char;
 	UCSR0B |= (1<<UDRIE0);
 	if(TXC0)
 	{
@@ -60,7 +68,8 @@ int USART_Receive_single(FILE* stream)
 	*  it means the receive operation has been completed.
 	*  Return the data written to UDR0.
 	*/
-	return PORTB;
+	volatile char* isr_buffer = (char*)0x0751;
+	return (int)*isr_buffer;
 }
 
 /**
@@ -75,10 +84,10 @@ FILE* USART_stream_setup(void)
 void USART_test(uint64_t ubrr)
 {
 	USART_Init(ubrr);	 // Start the USART module with a given baud rate.
-	char test_data;
+	USART_stream_setup();	 // Connect the USART module to the standard IO streams.
+	char test_data = 'a';
 	while(1)
 	{
-		scanf("%c", &test_data);
-		printf("Retrieved data from the USART line: %c", test_data);
+		printf("Retrieved data from the USART line: %c\n\r", test_data);
 	}
 }

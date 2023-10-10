@@ -4,7 +4,7 @@
 #define __AVR_ATmega162__
 #endif /*__AVR_ATmega162__*/
 #include <avr/io.h>
-#include "avr/interrupt.h"
+#include <avr/interrupt.h>
 #include <stdint.h>
 #include <stdio.h>
 

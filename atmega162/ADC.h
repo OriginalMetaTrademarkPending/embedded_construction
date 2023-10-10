@@ -1,6 +1,8 @@
 #ifndef ADC_H
 #define ADC_H
+#ifndef __AVR_ATmega162__
 #define __AVR_ATmega162__
+#endif /*__AVR_ATmega162__*/
 #include <avr/io.h>
 #include <stdint.h>
 #include "XMEM.h"
