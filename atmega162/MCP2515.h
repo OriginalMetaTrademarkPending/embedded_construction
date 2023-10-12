@@ -7,6 +7,11 @@
 #include <stdio.h>
 #include "mcp2515_defs.h"
 #include "SPI.h"
+#include <avr/io.h>
+#ifndef F_CPU
+#define F_CPU 4915200
+#endif /*F_CPU*/
+#include <util/delay.h>
 /* Low level driver for setting up the CAN controller and accessing its control and status registers. */
 
 /**
@@ -25,7 +30,7 @@ int MCP2515_init();
  * @param[in] address The address to read from.
  * @param[out] data The data buffer read from the SPI line.
  */
-void MCP2515_read(uint8_t address, uint8_t* data);
+uint8_t MCP2515_read(uint8_t address);
 
 /**
  * @brief Writes a CAN message from the bus.
@@ -33,14 +38,14 @@ void MCP2515_read(uint8_t address, uint8_t* data);
  * @param[in] address The address to write to.
  * @param[in] data The data to be written to the SPI line.
  */
-void MCP2515_write(uint8_t address, uint8_t data);
+void MCP2515_write(uint8_t address, char data);
 
 /**
  * @brief Sends a request to transmit a CAN message.
  *
  * @param[in] channel The transmission channel to send the request.
  */
-void MCP2515_request_to_send(uint8_t channel);
+void MCP2515_request_to_send(uint8_t tx_buffer);
 
 /**
  * @brief Modifies specific bits in a bitfield of the MCP2515.
@@ -49,12 +54,12 @@ void MCP2515_request_to_send(uint8_t channel);
  * @param[in] mask_byte The bit mask to modify.
  * @param[in] data The data to be modified.
  */
-void MCP2515_bit_modify(uint8_t address, uint8_t mask_byte, uint8_t data);
+void MCP2515_bit_modify(uint8_t address, uint8_t mask_byte, char data);
 
 /**
  * @brief Reads the status of the MCP2515 module.
  *
  * @param[out] status The buffer to write the status of the MCP2515 module to.
  */
-void MCP2515_read_status(uint8_t* status);
+uint8_t MCP2515_read_status();
 #endif /*MCP2515_H*/

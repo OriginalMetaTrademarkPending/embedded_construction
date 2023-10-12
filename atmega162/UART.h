@@ -38,4 +38,9 @@ int USART_Receive_single(FILE* stream);
  * @return 0 if printf was successful, some value if it wasn't.
 */
 FILE* USART_stream_setup(void);
+
+/**
+ * @brief Test program for the USART module.
+ */
+void USART_test(uint64_t ubrr);
 #endif /*UART_H*/

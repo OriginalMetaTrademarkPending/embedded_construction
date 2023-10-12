@@ -6,6 +6,11 @@
 #include <stdint.h>
 #include <string.h>
 #include "fonts.h"
+#include "ADC.h"
+#ifndef F_CPU
+#define F_CPU 4915200
+#endif /*F_CPU*/
+#include <util/delay.h>
 /* Driver for the OLED screen.*/
 
 /**

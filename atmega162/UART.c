@@ -1,4 +1,6 @@
 #include "UART.h"
+#include <stdint.h>
+#include <stdio.h>
 /**
  * VALIDATED!
  */
@@ -13,6 +15,9 @@ void USART_Init(uint64_t ubrr)
 	/* Configuring the USART module.
 	*  We want 2 stop bits and a data format of 8 bits per package. */
 	UCSR0C = (1<<URSEL0)|(1<<USBS0)|(3<<UCSZ00);
+
+	/* Connect the USART interface to the standard IO streams. */
+	USART_stream_setup();
 }
 
 
@@ -68,4 +73,15 @@ int USART_Receive_single(FILE* stream)
 FILE* USART_stream_setup(void)
 {
 	return fdevopen(USART_Transmit_single, USART_Receive_single);
+}
+
+void USART_test(uint64_t ubrr)
+{
+	USART_Init(ubrr);
+	char test_data;
+	while (1)
+	{
+		scanf("%c", &test_data);
+		printf("Retrieved data: %c\n\r", test_data);
+	}
 }

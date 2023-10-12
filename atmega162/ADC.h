@@ -68,4 +68,9 @@ joy_dir dir_read(uint8_t* calib_array);
  * @returns The joystick direction as a string for printing to the screen.
  */
 const char* joy_dir_to_string(joy_dir direction);
+
+/**
+ * @brief Test program for the ADC module.
+ */
+void ADC_test(void);
 #endif /*ADC_H*/

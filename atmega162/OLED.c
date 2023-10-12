@@ -1,4 +1,5 @@
 #include "OLED.h"
+#include "ADC.h"
 #include "fonts.h"
 #include <stdint.h>
 #include <avr/pgmspace.h>
@@ -162,4 +163,36 @@ void OLED_highscores(int state, uint8_t* scores)
 	OLED_printf("Placeholder 3");
 	OLED_goto_pos(6, 10);
 	OLED_printf("Back");
+}
+
+void OLED_test(void)
+{
+	uint8_t calib_array[4];
+	ADC_calibrate(calib_array);
+	int selector = 1;
+	int game_done = 1;
+	while (game_done) 
+	{
+		_delay_ms(300);
+		joy_dir dirJoy = dir_read(calib_array);
+		if(dirJoy==UP){
+			selector -= 1;
+			if(selector < 1){
+				selector=4;
+			}
+			OLED_clear_columns(0, 10);
+			OLED_goto_pos(selector+2, 0);
+			OLED_printf_char('>');
+		}
+		else if (dirJoy==DOWN) {
+			selector += 1;
+			if (selector>4) {
+				selector = 1;
+			}
+			OLED_clear_columns(0, 10);
+			OLED_goto_pos(selector+2, 0);
+			OLED_printf_char('>');
+		}
+		OLED_home(selector);
+	}
 }

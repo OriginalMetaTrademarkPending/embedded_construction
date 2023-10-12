@@ -17,16 +17,16 @@
 void SPI_init();
 
 /**
- * @brief Sends a byte to the specified slave unit.
+ * @brief Performs a register shift on the MISO/MOSI line.
  *
- * @param[in] The byte to be sent.
+ * @param[in] The byte to be shifted to the slave.
  */
-void SPI_send(uint8_t data);
+void SPI_transmit(uint8_t data);
 
 /**
- * @brief Reads a byte from the specified slave unit.
- * 
- * @return The byte that was read.
+ * @brief Receives data from the slave.
+ *
+ * @return The byte shifted by the slave
  */
-uint8_t SPI_read();
+uint8_t SPI_receive(void);
 #endif /*SPI_H*/

@@ -14,7 +14,7 @@ typedef struct
 {
 	uint16_t id;			// ID of the CAN dataframe
 	uint8_t frame_length;		// Dataframe length
-	uint8_t* data;			// Dataframe content
+	char data[8];			// Dataframe content
 }CAN_frame;
 
 /*
@@ -25,7 +25,7 @@ void CAN_init();
 /**
  * @brief Sends a dataframe over the CAN network.
  */
-void CAN_write(CAN_frame* frame, uint8_t channel);
+void CAN_write(CAN_frame* frame);
 
 /**
  * @brief Receives a dataframe from the CAN network.
