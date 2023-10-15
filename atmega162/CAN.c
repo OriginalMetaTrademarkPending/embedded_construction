@@ -35,11 +35,11 @@ void CAN_write(CAN_frame *frame)
 CAN_frame CAN_read()
 {
 	CAN_frame result;
-	uint8_t id_low;
-	uint8_t id_high;
+	uint16_t id_low;
+	uint16_t id_high;
 	id_low = MCP2515_read(MCP_RXB0SIDL)/0b100000;
 	id_high = MCP2515_read(MCP_RXB0SIDH);
-	result.id = (id_high*0b1000) + id_low;
+	result.id = (id_high << 8) | id_low;
 	result.frame_length = MCP2515_read(MCP_RXB0DLC);
 	for(uint8_t i = 0; i < result.frame_length; i++)
 	{
