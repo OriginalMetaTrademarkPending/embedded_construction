@@ -20,7 +20,7 @@ typedef struct
 /*
  * @brief Initializes the CAN module.
  */
-void CAN_init();
+void CAN_init(uint8_t mode);
 
 /**
  * @brief Sends a dataframe over the CAN network.
@@ -31,7 +31,12 @@ void CAN_write(CAN_frame* frame);
  * @brief Receives a dataframe from the CAN network.
  */
 CAN_frame CAN_read();
+
 /**
- * @brief */
+ * @brief Tests the CAN network.
+ *
+ * @warning This test does not initialize the UART interface. You must call USART_Init() separately in the main.c file.
+ */
+void CAN_test();
 
 #endif /*CAN_H*/

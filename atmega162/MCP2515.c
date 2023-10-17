@@ -45,7 +45,7 @@ uint8_t MCP2515_read(uint8_t address)
 	PORTB &= ~(1<<SS);
 	SPI_transmit(MCP_READ);			// Send read instructions
 	SPI_transmit(address);			// Send address
-	result = SPI_receive();		// Read result
+	result = SPI_receive();			// Read result
 	PORTB |= (1<<SS);
 	return result;
 }

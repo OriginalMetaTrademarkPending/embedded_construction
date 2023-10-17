@@ -1,0 +1,7 @@
+-Wall
+-L/usr/local/lib
+-I/home/admirm/Documents/TTK4155/embedded_construction/atsam3x8e/sam/sam3x/include
+-I/home/admirm/Documents/TTK4155/embedded_construction/atsam3x8e/sam/cmsis
+-I/home/admirm/Documents/TTK4155/embedded_construction/atsam3x8e/sam/sam3x/source
+-I/home/admirm/Documents/TTK4155/embedded_construction/atsam3x8e/sam
+-lfmt
