@@ -10,9 +10,9 @@ void CAN_init(uint8_t mode)
 	MCP2515_init();
 	MCP2515_reset();
 	MCP2515_write(MCP_CANINTE, MCP_NO_INT);			// Interrupts disabled
-	MCP2515_write(MCP_CNF1, 0x43);				// Setting BRP+1 to 4 (BRP to 3). SJW+1 is set to 2 TQ.
-	MCP2515_write(MCP_CNF2, 0x31);				// Setting PROPSEG+1 to 2 TQ (PROPSEG to 1) and PS1+1 to 7 TQ (PS1 to 6).
-	MCP2515_write(MCP_CNF3, 0x05);				// Setting PS2+1 to 6 TQ (PS2 to 5).
+	MCP2515_write(MCP_CNF1, 0b00000011);			// Setting BRP+1 to 4 (BRP to 3). SJW+1 is set to 1 TQ.
+	MCP2515_write(MCP_CNF2, 0b10010001);			// Setting PROPSEG+1 to 2 TQ (PROPSEG to 1) and PS1+1 to 3 TQ (PS1 to 2). BTLMODE is also set to 1.
+	MCP2515_write(MCP_CNF3, 0b00000011);			// Setting PS2+1 to 4 TQ (PS2 to 3).
 	MCP2515_write(MCP_CANCTRL, mode);
 }
 

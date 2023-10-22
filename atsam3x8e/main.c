@@ -24,13 +24,14 @@ int main()
      *  CAN BR calculations.
      *
      *  BRP must be 20 (BRP+1 = 21)
-     *  PROPSEG+1 must be 3 TQ (PROPSEG = 2)
-     *  PS1 +1 must be 4 TQ (PS1 = 4)
-     *  PS2 + 1 must be 2 TQ (PS2 = 1)
+     *  PROPSEG+1 must be 2 TQ (PROPSEG = 1)
+     *  PS1 +1 must be 3 TQ (PS1 = 2)
+     *  PS2 + 1 must be 4 TQ (PS2 = 3)
+     *  SJW+1 is set to 1.
      *
      *  Total = 10 TQ.
      */
-    const uint32_t can_br = 0x00171165;
+    const uint32_t can_br = 0x00151123;
     can_init_def_tx_rx_mb(can_br);
 
     CAN_MESSAGE data = {};

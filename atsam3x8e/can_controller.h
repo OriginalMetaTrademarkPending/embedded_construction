@@ -13,6 +13,7 @@
 #define CAN_CONTROLLER_H_
 
 #include <stdint.h>
+#include "sam3x8e.h"
 
 typedef struct can_message_t
 {
