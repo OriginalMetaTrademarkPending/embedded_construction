@@ -28,11 +28,10 @@ int main(void)
 {
 	USART_Init(MYUBBR);
 	CAN_init(MODE_NORMAL);
-	CAN_frame data = {11, 7, "Hello!\0"};
+	CAN_frame data = {0x0020, 8, "Hello!!\0"};
 	while(1)
 	{
 		CAN_write(&data);
-		printf("Data sent...\n\r");
 	}
 	return EXIT_SUCCESS;
 }

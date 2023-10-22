@@ -20,14 +20,24 @@ int main()
     //printf("D1 on");
     //PIOA->PIO_SODR |= (LED_D2);     // LED_D2 set to high.
     //printf("D2 on");
-    const uint32_t can_br = 0x00030212;
+    /*
+     *  CAN BR calculations.
+     *
+     *  BRP must be 20 (BRP+1 = 21)
+     *  PROPSEG+1 must be 3 TQ (PROPSEG = 2)
+     *  PS1 +1 must be 4 TQ (PS1 = 4)
+     *  PS2 + 1 must be 2 TQ (PS2 = 1)
+     *
+     *  Total = 10 TQ.
+     */
+    const uint32_t can_br = 0x00171165;
     can_init_def_tx_rx_mb(can_br);
 
     CAN_MESSAGE data = {};
 
     while (1)
     {
-        printf("ID: %d\n\rLength: %d\n\rData: %s\n\r", data.id, data.data_length, data.data);
+        can_receive(&data, 0);
     }
     
 }

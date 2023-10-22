@@ -10,9 +10,9 @@ void CAN_init(uint8_t mode)
 	MCP2515_init();
 	MCP2515_reset();
 	MCP2515_write(MCP_CANINTE, MCP_NO_INT);			// Interrupts disabled
-	MCP2515_write(MCP_CNF1, 0x14);
-	MCP2515_write(MCP_CNF2, 0x8b);
-	MCP2515_write(MCP_CNF3, 0x02);
+	MCP2515_write(MCP_CNF1, 0x43);				// Setting BRP+1 to 4 (BRP to 3). SJW+1 is set to 2 TQ.
+	MCP2515_write(MCP_CNF2, 0x31);				// Setting PROPSEG+1 to 2 TQ (PROPSEG to 1) and PS1+1 to 7 TQ (PS1 to 6).
+	MCP2515_write(MCP_CNF3, 0x05);				// Setting PS2+1 to 6 TQ (PS2 to 5).
 	MCP2515_write(MCP_CANCTRL, mode);
 }
 
@@ -21,8 +21,8 @@ void CAN_write(CAN_frame *frame)
 	// CAN sending logic is as follows...
 	// Sequence begins when the device determines that the TXBnCTRL.TXREQ for any of the transmit registers has been set.
 	// For now, assume the CAN bus is available to start transmission. Set the id of the message.
-	MCP2515_write(MCP_TXB0SIDL, (frame->id) << 5);
-	MCP2515_write(MCP_TXB0SIDH, ((frame->id) >> 3));
+	MCP2515_write(MCP_TXB0SIDL, (frame->id));
+	MCP2515_write(MCP_TXB0SIDH, ((frame->id) >> 8));
 	
 	// Set the data length of the message.
 	MCP2515_write(MCP_TXB0DLC, (frame->frame_length));
@@ -41,7 +41,7 @@ CAN_frame CAN_read()
 	CAN_frame result;
 	uint16_t id_low = MCP2515_read(MCP_RXB0SIDL);
 	uint16_t id_high = MCP2515_read(MCP_RXB0SIDH);
-	result.id = (id_high << 3) | (id_low >> 5);
+	result.id = (id_high << 8) | (id_low);
 	result.frame_length = MCP2515_read(MCP_RXB0DLC);
 	for(uint8_t i = 0; i < result.frame_length; i++)
 	{
