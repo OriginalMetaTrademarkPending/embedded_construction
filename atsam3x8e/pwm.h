@@ -6,7 +6,6 @@
 #include "instance/instance_pmc.h"
 #include "instance/instance_pwm.h"
 #include "sam/sam3x/include/component/component_pwm.h"
-
 /*
  * @brief Initializes the PWM module.
  */

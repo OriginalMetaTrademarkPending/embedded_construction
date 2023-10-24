@@ -34,7 +34,7 @@ int pwm_init()
 	PWM->PWM_CH_NUM[6].PWM_CMR = PWM_CMR_CPRE_CLKB;
 
 	PWM->PWM_CH_NUM[5].PWM_CPRD = PWM_CPRD_CPRD(20000);
-	PWM->PWM_CH_NUM[6].PWM_CPRD = PWM_CPRD_CPRD(0);
+	PWM->PWM_CH_NUM[6].PWM_CPRD = PWM_CPRD_CPRD(20000);
 	return 0;
 }
 
@@ -49,6 +49,7 @@ void pwm_set_dc(float *duty_cycle, uint8_t channel)
 	{
 		*duty_cycle = 0.0405;
 	}
-	int CDTY = 0;
+	int CDTY = (int)(PWM->PWM_CH_NUM[channel].PWM_CPRD*(1-*duty_cycle));
+	PWM->PWM_CH_NUM[channel].PWM_CDTY = PWM_CDTY_CDTY(CDTY);	
 }
 

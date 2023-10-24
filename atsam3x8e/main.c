@@ -41,12 +41,12 @@ int main()
     CAN_MESSAGE data = {0x0040, 5, "Hei!\0"};   
     pwm_init();
     // Setting the time value to 1 ms
-    int value = 1000;
+    float dc = 0.105;
     
 
     while (1)
     {
-        pwm_set_dc(value);
+        pwm_set_dc(&dc, 6);
     }
     
 }
