@@ -1,12 +1,16 @@
+#include "sam.h"
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
+#include "component/component_can.h"
+#include "sam3x8e.h"
 #include "uart_and_printf/uart.h"
 #include "uart_and_printf/printf-stdarg.h"
 #include "can_controller.h"
 #include "can_interrupt.h"
-#include "sam.h"
+#include "pwm.h"
+#define LED_D1 PIO_PA19
 
 int main()
 {
@@ -29,16 +33,20 @@ int main()
      *  PS2 + 1 must be 4 TQ (PS2 = 3)
      *  SJW+1 is set to 1.
      *
-     *  Total = 10 TQ.
+     *  Total = 16 TQ.
      */
-    const uint32_t can_br = 0x00151123;
+    const uint32_t can_br = 0x00292165;
     can_init_def_tx_rx_mb(can_br);
 
-    CAN_MESSAGE data = {};
+    CAN_MESSAGE data = {0x0040, 5, "Hei!\0"};   
+    pwm_init();
+    // Setting the time value to 1 ms
+    int value = 1000;
+    
 
     while (1)
     {
-        can_receive(&data, 0);
+        pwm_set_dc(value);
     }
     
 }

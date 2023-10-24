@@ -14,13 +14,13 @@ typedef struct
 {
 	uint16_t id;			// ID of the CAN dataframe
 	uint8_t frame_length;		// Dataframe length
-	char data[8];			// Dataframe content
+	uint8_t data[8];		// Dataframe content
 }CAN_frame;
 
 /*
  * @brief Initializes the CAN module.
  */
-void CAN_init(uint8_t mode);
+int CAN_init(uint8_t mode);
 
 /**
  * @brief Sends a dataframe over the CAN network.

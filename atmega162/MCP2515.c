@@ -22,13 +22,6 @@ int MCP2515_init()
 		return -1;
 	}
 
-	MCP2515_write(MCP_CANCTRL, MODE_LOOPBACK);
-	value = MCP2515_read(MCP_CANSTAT);
-	if((value & MODE_MASK) != MODE_LOOPBACK)
-	{
-		printf("MCP2515 is NOT in loopback mode after initialization!\n\r");
-		return 1;
-	}
 	return 0;
 }
 

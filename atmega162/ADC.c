@@ -1,8 +1,10 @@
 #include "ADC.h"
 #include "XMEM.h"
+#include "CAN.h"
 
 void ADC_init()
 {
+	XMEM_init();
 	DDRD |= (1<<PD4);
 	TCCR3A &= ~(1<<COM3A0);
 	TCCR3A |= (1<<COM3A1 | 1<<WGM31);
@@ -22,7 +24,7 @@ void ADC_read(uint8_t channel, uint8_t* result)
 	adc_addr[0] = channel;
 
 	/* Delaying for read completion. */
-	_delay_us(20);
+	_delay_us(15);
 
 	for(uint8_t i = 0; i < 4; i++)
 	{
@@ -209,4 +211,15 @@ void ADC_test()
 		printf("\n\r");
 		_delay_ms(1000);
 	}
+}
+
+void ADC_send_data(uint8_t *adc_meas)
+{
+	CAN_frame joy_data;
+	joy_data.id = 0x0020;
+	joy_data.frame_length = 2;
+	joy_data.data[0] = *(adc_meas);
+	joy_data.data[1] = *(adc_meas + 1);
+	CAN_write(&joy_data);
+	printf("Data sent: %u %u\n\r", joy_data.data[0], joy_data.data[1]);
 }

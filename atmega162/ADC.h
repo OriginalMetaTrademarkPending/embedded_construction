@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "XMEM.h"
-#define ADC_BASE_ADDR 0x1400
+#include "CAN.h"
 #define F_CPU 4915200
 #include <util/delay.h>
 
@@ -73,4 +73,10 @@ const char* joy_dir_to_string(joy_dir direction);
  * @brief Test program for the ADC module.
  */
 void ADC_test(void);
+
+/**
+ * @brief Sends joystick data over CAN
+ */
+void ADC_send_data(uint8_t *adc_meas);
+
 #endif /*ADC_H*/

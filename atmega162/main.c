@@ -26,12 +26,19 @@
 
 int main(void)
 {
+	uint8_t calib_array[4];
+	uint8_t adc_meas[4];
 	USART_Init(MYUBBR);
+	XMEM_init();
 	CAN_init(MODE_NORMAL);
-	CAN_frame data = {0x0020, 8, "Hello!!\0"};
+	ADC_init();
+	OLED_init();
+	ADC_calibrate(calib_array);
+	printf("ADC calibrated! Sending data...\n\r");
 	while(1)
 	{
-		CAN_write(&data);
+		ADC_read(0, adc_meas);
+		ADC_send_data(adc_meas);
 	}
 	return EXIT_SUCCESS;
 }
