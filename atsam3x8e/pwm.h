@@ -6,6 +6,7 @@
 #include "instance/instance_pmc.h"
 #include "instance/instance_pwm.h"
 #include "sam/sam3x/include/component/component_pwm.h"
+
 /*
  * @brief Initializes the PWM module.
  */
@@ -13,9 +14,9 @@ int pwm_init();
 
 
 /*
- * @brief Set the DC value between 0,9-2,1V.
+ * @brief Set the duty cycle value.
 */
-void pwm_set_dc(int value);
+void pwm_set_dc(float *duty_cycle, uint8_t channel);
 
 #endif /*PWM_H*/
 
