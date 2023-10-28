@@ -215,13 +215,13 @@ void ADC_test()
 	}
 }
 
-void ADC_send_data(uint8_t *adc_meas)
+void ADC_send_data(pos_t *adc_meas)
 {
 	CAN_frame joy_data;
 	joy_data.id = 0x0020;
 	joy_data.frame_length = 2;
-	joy_data.data[0] = *(adc_meas);
-	joy_data.data[1] = *(adc_meas + 1);
+	joy_data.data[0] = adc_meas->posX_t;
+	joy_data.data[1] = adc_meas->posY_t;
 	CAN_write(&joy_data);
 	printf("Data sent: %u %u\n\r", joy_data.data[0], joy_data.data[1]);
 }

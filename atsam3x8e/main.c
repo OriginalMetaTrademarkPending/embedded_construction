@@ -39,21 +39,18 @@ int main()
     const uint32_t can_br = 0x00292165;
     can_init_def_tx_rx_mb(can_br);
 
-    CAN_MESSAGE data = {0x0040, 5, "Hei!\0"};   
-    pwm_init();
-
+    CAN_MESSAGE data;   
     // Setting the servo position in %-s.
-    float ServoPosition = 90;
     servo_init();
-
     while (1)
     {
         pos_t joy_stick_position;
-        can_receive(data, 2);
-        joy_stick_position = data
+        can_receive(&data, 0);
+        joy_stick_position.posX_t = data.data[0];
+        joy_stick_position.posY_t = data.data[1];
         // Write the x-value from the joystick
         servo_write(joy_stick_position.posX_t);
-        pwm_set_dc(&dc, 6);
+        //pwm_set_dc(&duty_cycle, 5);
     }
     
 }

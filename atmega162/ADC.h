@@ -77,6 +77,6 @@ void ADC_test(void);
 /**
  * @brief Sends joystick data over CAN
  */
-void ADC_send_data(uint8_t *adc_meas);
+void ADC_send_data(pos_t *adc_meas);
 
 #endif /*ADC_H*/

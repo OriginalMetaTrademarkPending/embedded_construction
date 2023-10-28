@@ -6,8 +6,8 @@
 // Define the pos_t structure such that the x- and y-values can be extracted.
 typedef struct
 {
-	int8_t posX_t;
-	int8_t posY_t;
+	uint8_t posX_t;
+	uint8_t posY_t;
 }pos_t;
 
 
@@ -19,7 +19,7 @@ void servo_init();
 /*
  * @brief Write the servo value. Converting the raw value to a duty cycle-value. [0-100]
  */
-void servo_write(int raw_value);
+void servo_write(uint8_t raw_value);
 
 
 #endif /*SERVO_H*/

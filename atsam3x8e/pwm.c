@@ -50,6 +50,6 @@ void pwm_set_dc(float *duty_cycle, uint8_t channel)
 		*duty_cycle = 0.045;
 	}
 	int CDTY = (int)(PWM->PWM_CH_NUM[channel].PWM_CPRD*(1-*duty_cycle));
-	PWM->PWM_CH_NUM[channel].PWM_CDTY = PWM_CDTY_CDTY(CDTY);	
+	PWM->PWM_CH_NUM[channel].PWM_CDTYUPD = PWM_CDTYUPD_CDTYUPD(CDTY);	
 }
 
