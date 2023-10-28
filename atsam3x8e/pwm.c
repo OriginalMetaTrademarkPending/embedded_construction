@@ -45,9 +45,9 @@ void pwm_set_dc(float *duty_cycle, uint8_t channel)
 	{
 		*duty_cycle = 0.105;
 	}
-	else if(*duty_cycle < 0.0405)
+	else if(*duty_cycle < 0.045)
 	{
-		*duty_cycle = 0.0405;
+		*duty_cycle = 0.045;
 	}
 	int CDTY = (int)(PWM->PWM_CH_NUM[channel].PWM_CPRD*(1-*duty_cycle));
 	PWM->PWM_CH_NUM[channel].PWM_CDTY = PWM_CDTY_CDTY(CDTY);	

@@ -10,6 +10,7 @@
 #include "can_controller.h"
 #include "can_interrupt.h"
 #include "pwm.h"
+#include "servo.h"
 #define LED_D1 PIO_PA19
 
 int main()
@@ -40,12 +41,18 @@ int main()
 
     CAN_MESSAGE data = {0x0040, 5, "Hei!\0"};   
     pwm_init();
-    // Setting the time value to 1 ms
-    float dc = 0.105;
-    
+
+    // Setting the servo position in %-s.
+    float ServoPosition = 90;
+    servo_init();
 
     while (1)
     {
+        pos_t joy_stick_position;
+        can_receive(data, 2);
+        joy_stick_position = data
+        // Write the x-value from the joystick
+        servo_write(joy_stick_position.posX_t);
         pwm_set_dc(&dc, 6);
     }
     
