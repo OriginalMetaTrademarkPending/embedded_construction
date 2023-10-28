@@ -2,6 +2,7 @@
 #include "XMEM.h"
 #include "CAN.h"
 
+
 void ADC_init()
 {
 	XMEM_init();
@@ -131,9 +132,10 @@ pos_t pos_read(uint8_t* calib_array)
 	}
 
 	
-
-	int8_t percX = (int8_t)(((x_raw-x_min)*(200.0))/(x_max-x_min)) - 100;
-	int8_t percY = (int8_t)(((y_raw-y_min)*(200.0))/(y_max-y_min)) - 100;
+	// Changed the formula. Now gives value from [0-100]. 50 means stable value.
+	// New_value = (old_value-min_old)* ((max_new-min_new)/(max_old-min_old)) + min_new
+	uint8_t percX = (int8_t)(((x_raw-x_min)*(100.0))/(x_max-x_min)) - 0;
+	uint8_t percY = (int8_t)(((y_raw-y_min)*(100.0))/(y_max-y_min)) - 0;
 	result.posX_t = percX;
 	result.posY_t = percY;
 

@@ -16,8 +16,8 @@
 
 typedef struct
 {
-	int8_t posX_t;
-	int8_t posY_t;
+	uint8_t posX_t;
+	uint8_t posY_t;
 }pos_t;
 
 typedef enum {NEUTRAL=0, LEFT, RIGHT, UP, DOWN}joy_dir;
