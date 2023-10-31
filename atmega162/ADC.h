@@ -16,8 +16,8 @@
 
 typedef struct
 {
-	uint8_t posX_t;
-	uint8_t posY_t;
+	int8_t posX_t;
+	int8_t posY_t;
 }pos_t;
 
 typedef enum {NEUTRAL=0, LEFT, RIGHT, UP, DOWN}joy_dir;
@@ -79,4 +79,5 @@ void ADC_test(void);
  */
 void ADC_send_data(pos_t *adc_meas);
 
+void ADC_send_subroutine(unsigned long myubbr);
 #endif /*ADC_H*/

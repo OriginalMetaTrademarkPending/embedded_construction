@@ -11,11 +11,10 @@
  */
 int pwm_init();
 
-
 /*
  * @brief Set the duty cycle value.
 */
-void pwm_set_dc(float *duty_cycle, uint8_t channel);
+void pwm_set_dc(int value);
 
 #endif /*PWM_H*/
 

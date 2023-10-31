@@ -11,6 +11,7 @@
 #include "can_interrupt.h"
 #include "pwm.h"
 #include "servo.h"
+#include "adc.h"
 #define LED_D1 PIO_PA19
 
 int main()
@@ -42,15 +43,32 @@ int main()
     CAN_MESSAGE data;   
     // Setting the servo position in %-s.
     servo_init();
+    adc_init();
+    uint16_t goal_count;
+    bool goal = false;
     while (1)
     {
         pos_t joy_stick_position;
         can_receive(&data, 0);
         joy_stick_position.posX_t = data.data[0];
         joy_stick_position.posY_t = data.data[1];
+        // printf("Data received: %u %u\n\r", joy_stick_position.posX_t, joy_stick_position.posY_t);
         // Write the x-value from the joystick
         servo_write(joy_stick_position.posX_t);
-        //pwm_set_dc(&duty_cycle, 5);
+        uint16_t adc_val = ma_read();
+        printf("ADC value: %u\n\r", adc_val);
+        if(adc_val < 3500){
+            if(goal == false)
+            {
+                goal_count++;
+                goal = true;
+            }
+        }
+        else
+        {
+            goal = false;
+        }
+        printf("Current Score: %u\n\r", goal_count);
     }
     
 }

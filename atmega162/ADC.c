@@ -1,6 +1,9 @@
 #include "ADC.h"
 #include "XMEM.h"
 #include "CAN.h"
+#include "UART.h"
+#include "OLED.h"
+#include <stdint.h>
 
 
 void ADC_init()
@@ -134,8 +137,8 @@ pos_t pos_read(uint8_t* calib_array)
 	
 	// Changed the formula. Now gives value from [0-100]. 50 means stable value.
 	// New_value = (old_value-min_old)* ((max_new-min_new)/(max_old-min_old)) + min_new
-	uint8_t percX = (int8_t)(((x_raw-x_min)*(100.0))/(x_max-x_min)) - 0;
-	uint8_t percY = (int8_t)(((y_raw-y_min)*(100.0))/(y_max-y_min)) - 0;
+	int8_t percX = (int8_t)(((x_raw-x_min)*(100.0))/(x_max-x_min)) - 0;
+	int8_t percY = (int8_t)(((y_raw-y_min)*(100.0))/(y_max-y_min)) - 0;
 	result.posX_t = percX;
 	result.posY_t = percY;
 
@@ -224,4 +227,22 @@ void ADC_send_data(pos_t *adc_meas)
 	joy_data.data[1] = adc_meas->posY_t;
 	CAN_write(&joy_data);
 	printf("Data sent: %u %u\n\r", joy_data.data[0], joy_data.data[1]);
+}
+
+void ADC_send_subroutine(unsigned long myubbr)
+{
+	uint8_t calib_array[4];
+	pos_t adc_meas;
+	USART_Init(myubbr);
+	XMEM_init();
+	CAN_init(MODE_NORMAL);
+	ADC_init();
+	OLED_init();
+	ADC_calibrate(calib_array);
+	printf("ADC calibrated! Sending data...\n\r");
+	while(1)
+	{
+		adc_meas = pos_read(calib_array);
+		ADC_send_data(&adc_meas);
+	}
 }

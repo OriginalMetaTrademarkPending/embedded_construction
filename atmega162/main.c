@@ -26,19 +26,28 @@
 
 int main(void)
 {
-	uint8_t calib_array[4];
-	pos_t adc_meas;
-	USART_Init(MYUBBR);
-	XMEM_init();
-	CAN_init(MODE_NORMAL);
-	ADC_init();
-	OLED_init();
-	ADC_calibrate(calib_array);
-	printf("ADC calibrated! Sending data...\n\r");
-	while(1)
-	{
-		adc_meas = pos_read(calib_array);
-		ADC_send_data(&adc_meas);
-	}
+//	USART_Init(MYUBBR);
+//	ADC_init();
+//	uint8_t result[4];
+//	while(1)
+//	{
+//		ADC_read(0, result);
+//		printf("Slider left: %u\n\r", result[2]);
+//		printf("Slider right: %u\n\r", result[3]);
+//		if((PINB & (1<<PB3)) == (1<<PB3))
+//		{
+//			printf("Button 3 pressed\n\r");
+//		}
+//		if((PINB & (1<<PB4)) == (1<<PB4))
+//		{
+//			printf("Button 4 pressed\n\r");
+//		}
+//		if(!((PINB & (1<<PB2)) == (1<<PB2)))
+//		{
+//			printf("Joystick button pressed\n\r");
+//		}
+//		_delay_ms(500);
+//	}
+	ADC_send_subroutine(MYUBBR);
 	return EXIT_SUCCESS;
 }
