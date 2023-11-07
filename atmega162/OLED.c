@@ -174,7 +174,8 @@ void OLED_test(void)
 	while (game_done) 
 	{
 		_delay_ms(300);
-		joy_dir dirJoy = dir_read(calib_array);
+		pos_t joy_pos = pos_read(calib_array);
+		joy_dir dirJoy = dir_read(calib_array, joy_pos);
 		if(dirJoy==UP){
 			selector -= 1;
 			if(selector < 1){

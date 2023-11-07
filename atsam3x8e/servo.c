@@ -15,7 +15,7 @@ void servo_write(uint8_t raw_value)
     int channel = 5;
     // Converting to new range
     // New_value = (old_value-min_old)* ((max_new-min_new)/(max_old-min_old)) + min_new
-    int duty_cycle = (int)(100-raw_value)*((2100.0-900.0)/(100.0))+ 900;
+    int duty_cycle = (int)(raw_value)*((2100.0-900.0)/(100.0))+ 900;
     // Writing the new value to the servo channel
     pwm_set_dc(duty_cycle);
 }

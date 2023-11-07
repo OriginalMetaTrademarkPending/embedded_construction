@@ -12,6 +12,10 @@
 #include "pwm.h"
 #include "servo.h"
 #include "adc.h"
+#include "timer.h"
+#include "pid.h"
+#include "solenoid.h"
+#include "dac.h"
 #define LED_D1 PIO_PA19
 
 int main()
@@ -44,19 +48,32 @@ int main()
     // Setting the servo position in %-s.
     servo_init();
     adc_init();
+    dac_init();
+    motor_driver();
+    //pid_init(100000);
     uint16_t goal_count;
     bool goal = false;
+    pos_t joy_stick_position;
+    encoder_calibrate();
+    _delay_ms(3000);
+    //pid_init(10000);
+
+
     while (1)
     {
-        pos_t joy_stick_position;
+        
+       //P_REGULATOR();
+        // reset_motor();
+        // //dac_write(20);
+        // printf("%d\n\r", motor_read());
         can_receive(&data, 0);
         joy_stick_position.posX_t = data.data[0];
         joy_stick_position.posY_t = data.data[1];
         // printf("Data received: %u %u\n\r", joy_stick_position.posX_t, joy_stick_position.posY_t);
-        // Write the x-value from the joystick
+        //Write the x-value from the joystick
         servo_write(joy_stick_position.posX_t);
         uint16_t adc_val = ma_read();
-        printf("ADC value: %u\n\r", adc_val);
+        // printf("ADC value: %u\n\r", adc_val);
         if(adc_val < 3500){
             if(goal == false)
             {
@@ -68,7 +85,8 @@ int main()
         {
             goal = false;
         }
-        printf("Current Score: %u\n\r", goal_count);
+
+        // printf("Current Score: %u\n\r", goal_count);
     }
     
 }
