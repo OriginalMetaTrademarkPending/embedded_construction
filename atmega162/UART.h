@@ -8,13 +8,29 @@
 #include <stdint.h>
 #include <stdio.h>
 
+#define UART_RINGBUFFER_SIZE 64
+
+/**
+ * @brief Struct for ringbuffer implementation of the UART driver.
+ */
+typedef struct
+{
+	uint8_t head, tail;
+	char data[UART_RINGBUFFER_SIZE]; 
+}uart_ringbuffer_t;
+
+/**
+ * @brief Interrupt service routines for the UART module.
+ */
+ISR(USART0_RXC);
+
 /**
 * @brief Initiates the USART module.
 * @param ubrr The USART baud rate.
 *
 * @note UBRR is calculated as ((FOSC/(16-BAUDRATE))-1).
 */
-void USART_Init(uint64_t ubrr);
+void UART_Init(uint64_t ubrr);
 
 /**
  * @brief Transmits a single ASCII character through the USART line.
@@ -23,13 +39,13 @@ void USART_Init(uint64_t ubrr);
  * @return The value of TXC0 (USART0 Transfer Complete bit).
  *
 */
-int USART_Transmit_single(char ascii_char, FILE* stream);
+int UART_Transmit_single(char ascii_char, FILE* stream);
 
 /**
  * @brief Receives a single ASCII character from the USART line.
  * @return The received character from the USART line as an unsigned 8-bit integer.
 */
-int USART_Receive_single(FILE* stream);
+int UART_Receive_single(FILE* stream);
 
 /**
  * @brief Wrapper function for printf. Connects printf to the MCU.
@@ -37,10 +53,10 @@ int USART_Receive_single(FILE* stream);
  * 
  * @return 0 if printf was successful, some value if it wasn't.
 */
-FILE* USART_stream_setup(void);
+FILE* UART_stream_setup(void);
 
 /**
  * @brief Test program for the USART module.
  */
-void USART_test(uint64_t ubrr);
+void UART_test(uint64_t ubrr);
 #endif /*UART_H*/

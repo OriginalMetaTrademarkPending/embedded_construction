@@ -233,7 +233,7 @@ void ADC_send_subroutine(unsigned long myubbr)
 {
 	uint8_t calib_array[4];
 	pos_t adc_meas;
-	USART_Init(myubbr);
+	UART_Init(myubbr);
 	XMEM_init();
 	CAN_init(MODE_NORMAL);
 	ADC_init();
