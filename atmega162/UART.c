@@ -1,7 +1,6 @@
 #include "UART.h"
-#include <stdint.h>
-#include <stdio.h>
 
+/* Static ringbuffer for receive functionality. */
 uart_ringbuffer_t rx_buffer;
 
 /**

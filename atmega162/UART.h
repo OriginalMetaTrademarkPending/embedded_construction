@@ -20,43 +20,43 @@ typedef struct
 }uart_ringbuffer_t;
 
 /**
- * @brief Interrupt service routines for the UART module.
+ * @brief Interrupt service routine for the UART module.
  */
-ISR(USART0_RXC);
+ISR(USART0_RXC_vect);
 
 /**
-* @brief Initiates the USART module.
-* @param ubrr The USART baud rate.
+* @brief Initiates the UART module.
+* @param ubrr The UART baud rate.
 *
 * @note UBRR is calculated as ((FOSC/(16-BAUDRATE))-1).
 */
 void UART_Init(uint64_t ubrr);
 
 /**
- * @brief Transmits a single ASCII character through the USART line.
+ * @brief Transmits a single ASCII character through the UART line via polling.
  * @param ascii_char The ASCII character to be transmitted.
  *
- * @return The value of TXC0 (USART0 Transfer Complete bit).
+ * @return 0 if transmission succeeded.
  *
 */
 int UART_Transmit_single(char ascii_char, FILE* stream);
 
 /**
- * @brief Receives a single ASCII character from the USART line.
- * @return The received character from the USART line as an unsigned 8-bit integer.
+ * @brief Receives a single ASCII character from the UART ringbuffer.
+ * @return The head character from the UART ringbuffer.
 */
 int UART_Receive_single(FILE* stream);
 
 /**
  * @brief Wrapper function for printf. Connects printf to the MCU.
- * @param format A const formatted string (check printf for details).
  * 
- * @return 0 if printf was successful, some value if it wasn't.
+ * @return The file handle for the stream.
 */
 FILE* UART_stream_setup(void);
 
 /**
  * @brief Test program for the USART module.
+ * @param ubrr The baud rate for the communication.
  */
 void UART_test(uint64_t ubrr);
 #endif /*UART_H*/

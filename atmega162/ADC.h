@@ -11,15 +11,37 @@
 #include "CAN.h"
 #define F_CPU 4915200
 #include <util/delay.h>
+#define ADC_BASE_ADDR 0x1400
+#define ADC_MEMORY_SIZE 1023
 
 /* Driver for interfacing with the ADC. */
 
+/**
+ * @brief Struct for the ADC memory mapping as a ringbuffer.
+*/
+typedef struct
+{
+	uint16_t head, tail;
+	uint8_t* data;
+}ADC_ringbuffer_t;
+
+/**
+ * @brief ISR for the ADC interrupt on every read cycle.
+*/
+ISR(INT2_vect);
+
+/**
+ * @brief Struct for the joystick position read from the ADC.
+*/
 typedef struct
 {
 	int8_t posX_t;
 	int8_t posY_t;
 }pos_t;
 
+/**
+ * @brief Enum for the joystick direction.
+*/
 typedef enum {NEUTRAL=0, LEFT, RIGHT, UP, DOWN}joy_dir;
 
 /**
@@ -32,6 +54,8 @@ void ADC_init(void);
  *
  * @param[in] channel The channel to perform the reading from.
  * @param[out] result 8-bit integer array holding all the results from a conversion cycle.
+ * 
+ * NOTES: Try changing the connections and using a ringbuffer for the ADC memory.
  */
 void ADC_read(uint8_t channel, uint8_t* result);
 

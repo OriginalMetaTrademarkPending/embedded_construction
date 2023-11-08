@@ -5,29 +5,67 @@
 #include "OLED.h"
 #include <stdint.h>
 
+// Static ringbuffer for the ADC.
+ADC_ringbuffer_t ADC_ringbuffer;
+
+ISR(INT2_vect)
+{
+	// When this code is run, a conversion has been fulfilled.
+	// First, check whether the ringbuffer is empty.
+	if(ADC_ringbuffer.head == ADC_ringbuffer.tail)
+	{
+		printf("Ringbuffer empty...");
+	}
+	ADC_ringbuffer.data[ADC_ringbuffer.head] = 
+}
 
 void ADC_init()
 {
+	// Initialize the ringbuffer.
+	ADC_ringbuffer.head = 0;
+	ADC_ringbuffer.tail = 0;
+	ADC_ringbuffer.data = (uint8_t*)ADC_BASE_ADDR;
+	// Initialize the external memory interface.
 	XMEM_init();
+	// Setting pin D4 as output. We will use the auxiliary functionality.
 	DDRD |= (1<<PD4);
+	// TCCR3A configuration: 0x82
+	// Set compare output mode: Fast PWM. OCR3A is cleared on compare match and set at ICR3.
 	TCCR3A &= ~(1<<COM3A0);
 	TCCR3A |= (1<<COM3A1 | 1<<WGM31);
+	// TCCR3B configuration: 0x19
+	// Waveform generation: Fast PWM. I/O clock divided by 1024.
 	TCCR3B &= ~(1<<WGM33 | 0b111<<CS30);
 	TCCR3B |= (1<<WGM32 | 1<<WGM33 | 0b01 << CS30);
-	ICR3 = 20;
-	while(TCNT3 < 10);
-	OCR3A = 10;
+	ICR3 = 20;					// TOP set at 20.
+	while(TCNT3 < 10);			// Wait until counter reaches half.
+	OCR3A = 10;					// Set the output for comparison to 10.
+
+	// This code will generate a 10 kHz clock signal.
 }
 
 void ADC_read(uint8_t channel, uint8_t* result)
 {
-	/* Defining the base ADC address. */
-	volatile uint8_t* adc_addr = (uint8_t*)0x1400;
-
+	/* Check if the ringbuffer is full. */
+	if(((ADC_ringbuffer.tail + 1) % ADC_MEMORY_SIZE) == ADC_ringbuffer.head)
+	{
+		printf("ADC Ringbuffer full. Overwriting unread data in next reading...");
+	}
 	/* Sending the channel value as a bitmask to PORTA. */
-	adc_addr[0] = channel;
+	ADC_ringbuffer.data[ADC_ringbuffer.tail] = channel;
+	ADC_ringbuffer.tail = (ADC_ringbuffer.tail + 1) % ADC_MEMORY_SIZE;
+
+	// /* Defining the base ADC address. */
+	// volatile uint8_t* adc_addr = (uint8_t*)0x1400;
+
+	// /* Sending the channel value as a bitmask to PORTA. */
+	// adc_addr[0] = channel;
 
 	/* Delaying for read completion. */
+	/* NOTE: Set this up so that a delay is not necessary.
+		One way for it is to generate an interrupt from the BUSY pin.
+		The interrupt proceeds to store the data in the ringbuffer.
+		Try connecting the BUSY pin to INT2 and writing the ISR for it*/
 	_delay_us(15);
 
 	for(uint8_t i = 0; i < 4; i++)
