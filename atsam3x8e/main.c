@@ -14,9 +14,9 @@
 #include "motor.h"
 #include "adc.h"
 #include "timer.h"
-// #include "pid.h"
-#include "solenoid.h"
+#include "pid.h"
 #include "dac.h"
+#include "core_cm3.h"
 #define LED_D1 PIO_PA19
 
 int main()
@@ -45,28 +45,31 @@ int main()
     const uint32_t can_br = 0x00292165;
     can_init_def_tx_rx_mb(can_br);
 
-    CAN_MESSAGE data;   
+    CAN_MESSAGE data; 
     // Setting the servo position in %-s.
+    NVIC_SetPriority(CAN0_IRQn, 1);
+    NVIC_SetPriority(TC0_IRQn, 2);
     servo_init();
     adc_init();
     dac_init();
     motor_init();
+    encoder_calibrate();
+    _delay_ms(3000);
     uint16_t goal_count;
     bool goal = false;
     pos_t joy_stick_position;
-    encoder_calibrate();
-    _delay_ms(3000);
+    pid_init(100000);
+    __enable_irq();
     while (1)
     {
-        // P_REGULATOR();
+        //P_REGULATOR();
         // reset_motor();
         // printf("%d\n\r", motor_read());
-        can_receive(&data, 0);
-        joy_stick_position.posX_t = data.data[0];
-        joy_stick_position.posY_t = data.data[1];
+        // can_receive(&data, 0);
+        // joy_stick_position.posX_t = data.data[0];
         // printf("Data received: %u %u\n\r", joy_stick_position.posX_t, joy_stick_position.posY_t);
         //Write the x-value from the joystick
-        servo_write(joy_stick_position.posX_t);
+        // servo_write(joy_stick_position.posX_t);
         uint16_t adc_val = ma_read();
         // printf("ADC value: %u\n\r", adc_val);
         if(adc_val < 3500){

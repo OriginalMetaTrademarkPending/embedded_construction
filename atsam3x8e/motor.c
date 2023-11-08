@@ -9,11 +9,11 @@ void motor_init()
     REG_PMC_PCR = PMC_PCR_EN | PMC_PCR_DIV_PERIPH_DIV_MCK | (ID_PIOC << PMC_PCR_PID_Pos);
 	REG_PMC_PCER0 |= 1<<ID_PIOC;
     // Disabling the output mode of the MJ2 pins.
-	REG_PIOC_PER = PIO_PC1 | PIO_PC2 | PIO_PC3 | PIO_PC4 | PIO_PC5 | PIO_PC6 | PIO_PC7 | PIO_PC8;
-	REG_PIOC_ODR = PIO_PC1 | PIO_PC2 | PIO_PC3 | PIO_PC4 | PIO_PC5 | PIO_PC6 | PIO_PC8 | PIO_PC8;
+	REG_PIOC_PER |= PIO_PC1 | PIO_PC2 | PIO_PC3 | PIO_PC4 | PIO_PC5 | PIO_PC6 | PIO_PC7 | PIO_PC8;
+	REG_PIOC_ODR |= PIO_PC1 | PIO_PC2 | PIO_PC3 | PIO_PC4 | PIO_PC5 | PIO_PC6 | PIO_PC8 | PIO_PC8;
 	// Defining the necessary pins for communicating with the motor box.
-	PIOD->PIO_PER = (NOT_OE | SEL | DIR | NOT_RST | EN);
-	PIOD->PIO_OER = (NOT_OE | SEL | DIR | NOT_RST | EN);
+	PIOD->PIO_PER |= (NOT_OE | SEL | DIR | NOT_RST | EN);
+	PIOD->PIO_OER |= (NOT_OE | SEL | DIR | NOT_RST | EN);
 	
     // Reset the internal counter.
     reset_motor();
@@ -21,8 +21,8 @@ void motor_init()
 	// Initial configuration.
     // Activate NOT_RST and enable pins
     // Deactivate NOT_OE, SEL and DIR.
-	PIOD->PIO_SODR = NOT_RST | EN;
-	PIOD->PIO_CODR = NOT_OE | SEL | DIR;
+	PIOD->PIO_SODR |= NOT_RST | EN;
+	PIOD->PIO_CODR |= NOT_OE | SEL | DIR;
 }
 
 int16_t motor_read()
@@ -85,5 +85,5 @@ void encoder_calibrate()
 
 uint16_t joy_map(uint8_t pos)
 {
-    return (uint16_t)(pos*((max_right)-(max_left)/100)+max_left);
+    return (uint16_t)(pos*((ENC_MAX)/100)+ENC_MIN);
 }

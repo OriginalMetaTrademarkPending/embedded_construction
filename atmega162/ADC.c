@@ -10,6 +10,8 @@ void ADC_init()
 {
 	XMEM_init();
 	DDRD |= (1<<PD4);
+	DDRB &= ~(1<<PB2);
+	PORTB |= (1<<PB2);
 	TCCR3A &= ~(1<<COM3A0);
 	TCCR3A |= (1<<COM3A1 | 1<<WGM31);
 	TCCR3B &= ~(1<<WGM33 | 0b111<<CS30);
@@ -116,6 +118,8 @@ pos_t pos_read(uint8_t* calib_array)
 
 	uint8_t x_raw = pos[0];
 	uint8_t y_raw = pos[1];
+	uint8_t slider_right_raw = pos[2];
+	uint8_t slider_left_raw = pos[3];
 
 	if (x_raw<x_min)
 	{
@@ -137,18 +141,19 @@ pos_t pos_read(uint8_t* calib_array)
 	
 	// Changed the formula. Now gives value from [0-100]. 50 means stable value.
 	// New_value = (old_value-min_old)* ((max_new-min_new)/(max_old-min_old)) + min_new
-	int8_t percX = (int8_t)(((x_raw-x_min)*(100.0))/(x_max-x_min)) - 0;
-	int8_t percY = (int8_t)(((y_raw-y_min)*(100.0))/(y_max-y_min)) - 0;
+	int8_t percX = (int8_t)(((x_raw-x_min)*(JOYSTICK_MAX - JOYSTICK_MIN))/(x_max-x_min)) + JOYSTICK_MIN;
+	int8_t percY = (int8_t)(((y_raw-y_min)*(JOYSTICK_MAX - JOYSTICK_MIN))/(y_max-y_min)) + JOYSTICK_MIN;
+	uint8_t percSlideRight = (uint8_t)(((slider_right_raw - SLIDER_MIN)*(SLIDER_MAX - SLIDER_MIN))/(ADC_MAX - ADC_MIN)) + SLIDER_MIN;
+	uint8_t percSlideLeft = (uint8_t)(((slider_left_raw - SLIDER_MIN)*(SLIDER_MAX - SLIDER_MIN))/(ADC_MAX - ADC_MIN)) + SLIDER_MIN;
 	result.posX_t = percX;
 	result.posY_t = percY;
-
+	result.slideLeft = percSlideLeft;
+	result.slideRight = percSlideRight;
 	return result;
 }
 
-joy_dir dir_read(uint8_t* calib_array)
+joy_dir dir_read(pos_t joy_pos)
 {
-	pos_t joy_pos = pos_read(calib_array);
-
 	if(abs(joy_pos.posX_t) > abs(joy_pos.posY_t))
 	{
 		if(joy_pos.posX_t >= 20)
@@ -196,20 +201,18 @@ const char* joy_dir_to_string(joy_dir direction)
 void ADC_test()
 {
 	ADC_init();
-	XMEM_init();
 	uint8_t calib_array[4];
 	ADC_calibrate(calib_array);
 	uint8_t pos[4];
 	while(1)
 	{
 		ADC_read(0, pos);
-		int8_t posX = pos_read(calib_array).posX_t;
-		int8_t posY = pos_read(calib_array).posY_t;
-		joy_dir dirJoy = dir_read(calib_array);
+		pos_t position = pos_read(calib_array);
+		joy_dir dirJoy = dir_read(position);
 		printf("Joystick x raw:%d\t", pos[0]);
-		printf("Joystick x percent:%d\n\r", posX);
+		printf("Joystick x percent:%d\n\r", position.posX_t);
 		printf("Joystick y raw:%d\t", pos[1]);
-		printf("Joystick y percent:%d\n\r", posY);
+		printf("Joystick y percent:%d\n\r", position.posY_t);
 		printf("Joystick direction:%s\n\r", joy_dir_to_string(dirJoy));
 		printf("Slider right raw:%d\t", pos[2]);
 		printf("Slider left raw:%d\n\r", pos[3]);
@@ -220,13 +223,24 @@ void ADC_test()
 
 void ADC_send_data(pos_t *adc_meas)
 {
+	joy_dir joystick_direction = dir_read(*adc_meas);
 	CAN_frame joy_data;
 	joy_data.id = 0x0020;
-	joy_data.frame_length = 2;
+	joy_data.frame_length = 5;
 	joy_data.data[0] = adc_meas->posX_t;
 	joy_data.data[1] = adc_meas->posY_t;
+	joy_data.data[2] = adc_meas->slideRight;
+	joy_data.data[3] = adc_meas->slideLeft;
+	if(!(PINB & (1<<PB2)))
+	{
+		joy_data.data[4] = 0;
+	}
+	else
+	{
+		joy_data.data[4] = 1;
+	}
 	CAN_write(&joy_data);
-	printf("Data sent: %u %u\n\r", joy_data.data[0], joy_data.data[1]);
+	printf("Data sent: %u %u %u %u %u\n\r", joy_data.data[0], joy_data.data[1], joy_data.data[2], joy_data.data[3], joy_data.data[4]);
 }
 
 void ADC_send_subroutine(unsigned long myubbr)

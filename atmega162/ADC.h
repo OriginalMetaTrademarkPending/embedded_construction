@@ -12,12 +12,21 @@
 #define F_CPU 4915200
 #include <util/delay.h>
 
+#define JOYSTICK_MAX 100
+#define JOYSTICK_MIN 0
+#define SLIDER_MAX 100
+#define SLIDER_MIN 0
+#define ADC_MAX 255
+#define ADC_MIN 0
+
 /* Driver for interfacing with the ADC. */
 
 typedef struct
 {
 	int8_t posX_t;
 	int8_t posY_t;
+	uint8_t slideRight;
+	uint8_t slideLeft;
 }pos_t;
 
 typedef enum {NEUTRAL=0, LEFT, RIGHT, UP, DOWN}joy_dir;
@@ -49,7 +58,7 @@ void ADC_calibrate(uint8_t* calib_array);
  *
  * @returns The position of the X and Y coordinates, as a struct pos_t.
  */
-pos_t pos_read(uint8_t* calib_array);
+pos_t meas_map(uint8_t* calib_array);
 
 /**
  * @brief Reads the direction of the joystick.
@@ -58,7 +67,7 @@ pos_t pos_read(uint8_t* calib_array);
  *
  * @returns The direction of the joystick as an enum element.
  */
-joy_dir dir_read(uint8_t* calib_array);
+joy_dir dir_read(pos_t joy_pos);
 
 /**
  * @brief Prints a character array from the joy_dir enum.

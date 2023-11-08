@@ -12,9 +12,9 @@
  */
 typedef struct
 {
-	uint16_t id;			// ID of the CAN dataframe
+	uint16_t id;				// ID of the CAN dataframe
 	uint8_t frame_length;		// Dataframe length
-	uint8_t data[8];		// Dataframe content
+	int8_t data[8];				// Dataframe content
 }CAN_frame;
 
 /*

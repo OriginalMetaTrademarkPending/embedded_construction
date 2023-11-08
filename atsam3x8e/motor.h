@@ -25,6 +25,11 @@
 #define NOT_RST PIO_PD1
 #define EN PIO_PD9
 
+#define ENC_MAX 1400
+#define ENC_MSK 0x1fe
+#define ENC_MIN 0
+#define ENC_MID ENC_MAX/2
+
 extern int16_t max_right;
 extern int16_t max_left;
 

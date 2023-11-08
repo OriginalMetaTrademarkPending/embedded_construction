@@ -6,8 +6,6 @@
 #include <stdint.h>
 #include "timer.h"
 
-#define ENC_MSK 0x1fe
-
 /**
  * Initializes the DAC Controller module.
  */

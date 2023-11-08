@@ -4,6 +4,7 @@
 #include "sam3x8e.h"
 #include "component/component_tc.h"
 #include "dac.h"
+#include "servo.h"
 #include "instance/instance_tc0.h"
 #include <stdint.h>
 #include "can_controller.h"
@@ -27,11 +28,11 @@ typedef struct
 {
 	float Kp;
 	float Ki;
+	float Kd;
 	float T;
 	int16_t error_sum;
+	int16_t err[2];
 }PID_t;
-
-PID_t PID_regulator;
 
 /**
  * @brief Initializes the PID_regulator controller by setting up the timer interrupt.
