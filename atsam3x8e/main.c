@@ -49,12 +49,12 @@ int main()
     // Setting the servo position in %-s.
     NVIC_SetPriority(CAN0_IRQn, 1);
     NVIC_SetPriority(TC0_IRQn, 2);
+    pwm_init();
     servo_init();
     adc_init();
     dac_init();
     motor_init();
     encoder_calibrate();
-    _delay_ms(3000);
     uint16_t goal_count;
     bool goal = false;
     pos_t joy_stick_position;
@@ -62,7 +62,7 @@ int main()
     __enable_irq();
     while (1)
     {
-        //P_REGULATOR();
+        // P_REGULATOR();
         // reset_motor();
         // printf("%d\n\r", motor_read());
         // can_receive(&data, 0);

@@ -30,8 +30,6 @@
 #define ENC_MIN 0
 #define ENC_MID ENC_MAX/2
 
-extern int16_t max_right;
-extern int16_t max_left;
 
 /**
  * @brief Initializes the motor driver

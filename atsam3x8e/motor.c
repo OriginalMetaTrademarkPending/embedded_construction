@@ -42,11 +42,7 @@ int16_t motor_read()
 	uint8_t low = (REG_PIOC_PDSR & ENC_MSK) >> 1;
 	// 8. Set NOT_OE to high
 	PIOD->PIO_SODR = (NOT_OE);
-	uint16_t result = high << 8 | low;
-	if (result & (1<<15))
-	{
-		return ((uint16_t)(~result) + 1);
-	}
+	int16_t result = (int16_t)(high << 8 | low);
 	printf("Value read from motor: %u\n\r", result);
 	return result;
 }
@@ -85,5 +81,5 @@ void encoder_calibrate()
 
 uint16_t joy_map(uint8_t pos)
 {
-    return (uint16_t)(pos*((ENC_MAX)/100)+ENC_MIN);
+    return (uint16_t)(pos*((max_left - max_right)/100)+ max_right);
 }
