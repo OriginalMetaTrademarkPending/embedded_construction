@@ -11,9 +11,10 @@
 #include "can_interrupt.h"
 #include "pwm.h"
 #include "servo.h"
+#include "motor.h"
 #include "adc.h"
 #include "timer.h"
-#include "pid.h"
+// #include "pid.h"
 #include "solenoid.h"
 #include "dac.h"
 #define LED_D1 PIO_PA19
@@ -49,22 +50,16 @@ int main()
     servo_init();
     adc_init();
     dac_init();
-    motor_driver();
-    //pid_init(100000);
+    motor_init();
     uint16_t goal_count;
     bool goal = false;
     pos_t joy_stick_position;
     encoder_calibrate();
     _delay_ms(3000);
-    //pid_init(10000);
-
-
     while (1)
     {
-        
-       //P_REGULATOR();
+        // P_REGULATOR();
         // reset_motor();
-        // //dac_write(20);
         // printf("%d\n\r", motor_read());
         can_receive(&data, 0);
         joy_stick_position.posX_t = data.data[0];

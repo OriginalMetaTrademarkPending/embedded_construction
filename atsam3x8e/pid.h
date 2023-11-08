@@ -7,6 +7,7 @@
 #include "instance/instance_tc0.h"
 #include <stdint.h>
 #include "can_controller.h"
+#include "motor.h"
 
 
 /**
@@ -27,15 +28,13 @@ typedef struct
 	float Kp;
 	float Ki;
 	float T;
-	float error_sum;
-	float pos;
-	float ref;
-}pid_config;
+	int16_t error_sum;
+}PID_t;
 
-static pid_config pid = {1, 10, 0, 0, 0, 0};
+PID_t PID_regulator;
 
 /**
- * @brief Initializes the PID controller by setting up the timer interrupt.
+ * @brief Initializes the PID_regulator controller by setting up the timer interrupt.
  */
 int pid_init(uint32_t freq);
 
