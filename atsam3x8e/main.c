@@ -54,11 +54,12 @@ int main()
     adc_init();
     dac_init();
     motor_init();
+    solenoid_init();
     encoder_calibrate();
     uint16_t goal_count;
     bool goal = false;
     pos_t joy_stick_position;
-    pid_init(100000);
+    pid_init(5000);
     __enable_irq();
     while (1)
     {

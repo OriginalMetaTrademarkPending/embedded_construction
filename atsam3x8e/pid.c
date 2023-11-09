@@ -7,8 +7,8 @@ int pid_init(uint32_t freq)
 	printf("oogabooga 1");
 	// Initializing the PI regulator.
 	PID_regulator.Kp = 0.1;
-	PID_regulator.Ki = 10.0;
-	PID_regulator.Kd = 0.2;
+	PID_regulator.Ki = 0.2;
+	PID_regulator.Kd = 0;
 	PID_regulator.T = 1.0/freq;
 	PID_regulator.err[0] = 0;
 	PID_regulator.err[1] = 0;
@@ -21,7 +21,7 @@ int pid_init(uint32_t freq)
 	// Configuring the waveform mode
 	REG_TC0_CMR0 = TC_CMR_WAVE | TC_CMR_WAVSEL_UP_RC | TC_CMR_TCCLKS_TIMER_CLOCK4 | TC_CMR_ACPA_CLEAR | TC_CMR_ACPC_SET;
 	// Generating a 50% duty cycle waveform.
-	TC0->TC_CHANNEL[0].TC_RC = (uint32_t)(CHIP_FREQ_CPU_MAX/512/freq);
+	TC0->TC_CHANNEL[0].TC_RC = (uint32_t)(CHIP_FREQ_CPU_MAX/128/freq);
 	// Enable the interrupt routine for RC compare.
 	TC0->TC_CHANNEL[0].TC_IER = TC_IER_CPCS;
 	// Finally, connect the nested interrupt controller.
@@ -33,7 +33,6 @@ int pid_init(uint32_t freq)
 
 void TC0_Handler()
 {
-	printf("oogabooga2");
 	//When the interrupt is called, 1 cycle of the PI controller must be executed.
 	CAN_MESSAGE msg;
 	can_receive(&msg, 0);
@@ -43,7 +42,15 @@ void TC0_Handler()
 	PID_regulator.err[0] = ref_pos - current_pos;
 	PID_regulator.error_sum += PID_regulator.err[0];
 	int16_t err_deriv = PID_regulator.err[0] - PID_regulator.err[1];
-	int16_t u = (int16_t)((PID_regulator.Kp*PID_regulator.err[0]) + (PID_regulator.Ki*PID_regulator.T*PID_regulator.error_sum) + (PID_regulator.Kd/PID_regulator.T*(err_deriv)));
+	int16_t u = (int16_t)((PID_regulator.Kp*PID_regulator.err[0]) + (PID_regulator.Ki*PID_regulator.T*PID_regulator.error_sum)+ (PID_regulator.Kd/PID_regulator.T*(err_deriv)));
+	solenoid_run_button(msg.data[4]);
+	if(abs(u) < 5)
+	{
+		PIOD->PIO_CODR = EN;
+	}
+	else{
+		PIOD->PIO_SODR = EN;
+	}
 	if(PID_regulator.err[0] > 0)
 	{
 		PIOD->PIO_CODR = DIR;
@@ -53,12 +60,11 @@ void TC0_Handler()
 		PIOD->PIO_SODR = DIR;
 	}
 	dac_write(abs(u)/70);
-	printf("Written to motor: %d\n\r", abs(u));
-	servo_write(msg.data[0]);
+	//printf("Written to motor: %d\n\r", abs(u));
+	servo_write(msg.data[3]);
 	uint16_t status = TC0->TC_CHANNEL[0].TC_SR;
 	NVIC_ClearPendingIRQ(ID_TC0);
 	// The value from this function must be written to the motor.
-	printf("oogabooga2");
 }
 
 

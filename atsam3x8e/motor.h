@@ -30,6 +30,8 @@
 #define ENC_MIN 0
 #define ENC_MID ENC_MAX/2
 
+#define WINDOW_SIZE 5
+
 
 /**
  * @brief Initializes the motor driver
@@ -58,5 +60,10 @@ void encoder_calibrate();
  * @note This function is necessary in order to map the joystick values to the encoder values.
 */
 uint16_t joy_map(uint8_t pos);
+
+/**
+ * @brief Runs a moving average filter on the encoder.
+*/
+int16_t encoder_ma_filter();
 
 #endif /*MOTOR_H*/

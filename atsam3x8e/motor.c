@@ -3,6 +3,10 @@
 int16_t max_right;
 int16_t max_left;
 
+int16_t encoder_sum = 0;
+int16_t encoder_readings[WINDOW_SIZE];
+int16_t encoder_index = 0;
+
 void motor_init()
 {
     // Activating the clock for the MJ2 pins.
@@ -41,9 +45,11 @@ int16_t motor_read()
 	// 7. Read MJ2 to get low byte
 	uint8_t low = (REG_PIOC_PDSR & ENC_MSK) >> 1;
 	// 8. Set NOT_OE to high
+	PIOD->PIO_CODR |= NOT_RST;
+	PIOD->PIO_SODR |= NOT_RST;
 	PIOD->PIO_SODR = (NOT_OE);
 	int16_t result = (int16_t)(high << 8 | low);
-	printf("Value read from motor: %u\n\r", result);
+	printf("Value read from motor: %d\n\r", result);
 	return result;
 }
 
@@ -81,5 +87,22 @@ void encoder_calibrate()
 
 uint16_t joy_map(uint8_t pos)
 {
-    return (uint16_t)(pos*((max_left - max_right)/100)+ max_right);
+	if(max_left > max_right)
+	{
+		return (uint16_t)(pos*((max_left - max_right)/100)+ max_right);
+	}
+	else
+	{
+		return (uint16_t)(pos*((max_right - max_left)/100)+ max_left);
+	}
+}
+
+int16_t encoder_ma_filter()
+{
+	encoder_sum -= encoder_readings[encoder_index];
+	int16_t encoder_meas = motor_read();
+	encoder_readings[encoder_index] = encoder_meas;
+	encoder_sum += encoder_meas;
+	encoder_index = (encoder_index+1) % WINDOW_SIZE;
+	return (int16_t)(encoder_sum/WINDOW_SIZE);
 }

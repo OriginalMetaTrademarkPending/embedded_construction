@@ -9,7 +9,7 @@
 #include <stdint.h>
 #include "can_controller.h"
 #include "motor.h"
-
+#include "solenoid.h"
 
 /**
  * Some notes on the PID driver...
