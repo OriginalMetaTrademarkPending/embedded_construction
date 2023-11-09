@@ -34,6 +34,13 @@ typedef struct
 	int16_t err[2];
 }PID_t;
 
+typedef struct
+{
+	bool goal;	
+	uint16_t goal_count;
+
+}goal_params;
+
 /**
  * @brief Initializes the PID_regulator controller by setting up the timer interrupt.
  */
