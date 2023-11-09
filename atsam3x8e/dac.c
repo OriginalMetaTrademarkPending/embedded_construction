@@ -9,10 +9,10 @@ int dac_init()
 	REG_PMC_PCER1 |= 1<<(ID_DACC-32);
 	REG_DACC_CR = 1;
 	// Configuring the DAC module
-	REG_DACC_MR = (DACC_MR_TRGEN_DIS) | (DACC_MR_WORD_HALF) | (DACC_MR_USER_SEL_CHANNEL1) | (DACC_MR_STARTUP_0);
+	REG_DACC_MR = (DACC_MR_TRGEN_DIS) | (DACC_MR_WORD_HALF) | (DACC_MR_USER_SEL_CHANNEL0) | (DACC_MR_STARTUP_0);
 	REG_DACC_IER = DACC_IER_EOC;
-	// Enabling channel 1 for the DAC
-	REG_DACC_CHER = DACC_CHER_CH1;
+	// Enabling channel 0 for the DAC
+	REG_DACC_CHER = DACC_CHER_CH0;
 
 	return 0;
 }
