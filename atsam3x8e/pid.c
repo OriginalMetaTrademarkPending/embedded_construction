@@ -59,7 +59,7 @@ void TC0_Handler()
 	{
 		PIOD->PIO_SODR = DIR;
 	}
-	dac_write(abs(u)/70);
+	dac_write(abs(u)*1000);
 	//printf("Written to motor: %d\n\r", abs(u));
 	servo_write(msg.data[3]);
 	uint16_t status = TC0->TC_CHANNEL[0].TC_SR;
