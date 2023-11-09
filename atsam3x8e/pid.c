@@ -1,10 +1,17 @@
 #include "pid.h"
 
 PID_t PID_regulator;
+goal_params g;
 
 int pid_init(uint32_t freq)
 {
 	printf("oogabooga 1");
+	
+	//goal params
+	g.goal = false;
+	g.goal_count = 0;
+	//
+	
 	// Initializing the PI regulator.
 	PID_regulator.Kp = 0.1;
 	PID_regulator.Ki = 0.2;
@@ -62,6 +69,25 @@ void TC0_Handler()
 	dac_write(abs(u)/70);
 	//printf("Written to motor: %d\n\r", abs(u));
 	servo_write(msg.data[3]);
+
+	//Code for goal counting
+
+	uint16_t adc_val = ma_read();
+	//printf("ADC value: %u\n\r", adc_val);
+    	///*
+	if((adc_val < 2800) && g.goal == false)
+    	{
+        	g.goal = true;
+		g.goal_count++;
+    	}
+    	else if (adc_val > 2800)
+    	{
+        	g.goal = false;
+    	}
+	printf("Goal Count: %u\n\r", g.goal_count);
+	//*/
+
+	
 	uint16_t status = TC0->TC_CHANNEL[0].TC_SR;
 	NVIC_ClearPendingIRQ(ID_TC0);
 	// The value from this function must be written to the motor.
