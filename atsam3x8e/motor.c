@@ -64,7 +64,7 @@ void encoder_calibrate()
 {
 	reset_motor();
 	int16_t enc = motor_read();
-	dac_write(10);
+	dac_write(10000);
 	PIOD->PIO_CODR = DIR;
 	_delay_ms(1000);
 	while(abs(enc - motor_read()) > 100)
