@@ -3,7 +3,7 @@
 #include "instance/instance_dacc.h"
 #include "instance/instance_pmc.h"
 
-int dac_init()
+void dac_init()
 {
 	REG_PMC_PCR = PMC_PCR_EN | PMC_PCR_DIV_PERIPH_DIV_MCK | ID_DACC << PMC_PCR_PID_Pos;
 	REG_PMC_PCER1 |= 1<<(ID_DACC-32);
@@ -13,8 +13,6 @@ int dac_init()
 	REG_DACC_IER = DACC_IER_EOC;
 	// Enabling channel 0 for the DAC
 	REG_DACC_CHER = DACC_CHER_CH0;
-
-	return 0;
 }
 
 void dac_write(uint16_t data)

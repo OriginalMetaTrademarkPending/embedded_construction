@@ -6,13 +6,14 @@
 #include "instance/instance_pmc.h"
 #include "instance/instance_pwm.h"
 #include "sam/sam3x/include/component/component_pwm.h"
-/*
+/**
  * @brief Initializes the PWM module.
  */
-int pwm_init();
+void pwm_init();
 
-/*
+/**
  * @brief Set the duty cycle value.
+ * @param[in] value The value to be written out to the PWM channel. This is the ON period of the channel in microseconds.
 */
 void pwm_set_dc(int value);
 

@@ -21,6 +21,7 @@ void MCP2515_reset();
 
 /**
  * @brief Initializes the MCP2515 CAN module.
+ * @return -1 in case of failed initialization, 0 on success.
  */
 int MCP2515_init();
 

@@ -147,7 +147,6 @@ pos_t pos_read(uint8_t* calib_array)
 	{
 		y_raw=y_max;
 	}
-
 	
 	// Changed the formula. Now gives value from [0-100]. 50 means stable value.
 	// New_value = (old_value-min_old)* ((max_new-min_new)/(max_old-min_old)) + min_new

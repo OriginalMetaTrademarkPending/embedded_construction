@@ -7,9 +7,8 @@ CAN_MESSAGE Goals_message;
 
 
 
-int pid_init(uint32_t freq)
+void pid_init(uint32_t freq)
 {
-	printf("oogabooga 1");
 	// Initializing the PI regulator.
 	PID_regulator.Kp = 0.1;
 	PID_regulator.Ki = 0.2;
@@ -73,7 +72,6 @@ void TC0_Handler()
 		PIOD->PIO_SODR = DIR;
 	}
 	dac_write(abs(u)*1000);
-	//printf("Written to motor: %d\n\r", abs(u));
 	servo_write(msg.data[3]);
 
 
@@ -97,29 +95,4 @@ void TC0_Handler()
 
 	uint16_t status = TC0->TC_CHANNEL[0].TC_SR;
 	NVIC_ClearPendingIRQ(ID_TC0);
-	// The value from this function must be written to the motor.
-}
-
-
-void P_REGULATOR()
-{
-	int16_t K_p = 1;
-	CAN_MESSAGE msg;
-	can_receive(&msg, 0);
-	int16_t ref_pos = joy_map(msg.data[0]);
-	int16_t current_pos = motor_read();
-	int16_t error = ref_pos - current_pos;
-	int16_t u = K_p * error;
-	int MagicNumber = 40;
-	int speed = abs(u)/MagicNumber;
-	if(error > 0)
-	{
-		PIOD->PIO_CODR = DIR;
-	}
-	else
-	{
-		PIOD->PIO_SODR = DIR;
-	}
-	dac_write(speed);
-
 }

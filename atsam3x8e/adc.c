@@ -4,7 +4,7 @@
 #include "pio/pio_sam3x8e.h"
 #include "sam3x8e.h"
 
-int adc_init()
+void adc_init()
 {
 	ADC->ADC_MR = ADC_MR_FREERUN;
 	ADC->ADC_CHER = ADC_CHER_CH0;
@@ -13,7 +13,6 @@ int adc_init()
 	PMC->PMC_PCER1 |= 1 << (ID_ADC - 32);
 
 	ADC->ADC_CR = ADC_CR_START;
-	return 0;
 }
 
 uint16_t adc_read()

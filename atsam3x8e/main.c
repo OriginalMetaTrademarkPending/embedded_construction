@@ -17,20 +17,12 @@
 #include "pid.h"
 #include "dac.h"
 #include "core_cm3.h"
-#define LED_D1 PIO_PA19
 
 int main()
 {
     SystemInit();
     WDT->WDT_MR = WDT_MR_WDDIS; //Disable Watchdog Timer
-    //PIOA->PIO_PER |= (LED_D1 | LED_D2);     // Enable the LED pins
-    //PIOA->PIO_OER |= (LED_D1 | LED_D2);     // Set LED pins as outputs
-    //PIOA->PIO_SODR |= (LED_D1 | LED_D2);    // Set output data registers. Not PUDR(pull-up disable register) nor ODSR(Output Data Status Register)
     configure_uart();
-    //PIOA->PIO_SODR |= (LED_D1);     // LED_D1 set to high.
-    //printf("D1 on");
-    //PIOA->PIO_SODR |= (LED_D2);     // LED_D2 set to high.
-    //printf("D2 on");
     /*
      *  CAN BR calculations.
      *
@@ -61,19 +53,5 @@ int main()
     pos_t joy_stick_position;
     pid_init(5000);
     __enable_irq();
-    while (1)
-    {
-        // P_REGULATOR();
-        // reset_motor();
-        // printf("%d\n\r", motor_read());
-        // can_receive(&data, 0);
-        // joy_stick_position.posX_t = data.data[0];
-        // printf("Data received: %u %u\n\r", joy_stick_position.posX_t, joy_stick_position.posY_t);
-        //Write the x-value from the joystick
-        // servo_write(joy_stick_position.posX_t);
-        
-
-        // printf("Current Score: %u\n\r", goal_count);
-    }
-    
+    while (1);
 }

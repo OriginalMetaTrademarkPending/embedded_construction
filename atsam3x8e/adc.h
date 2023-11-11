@@ -13,15 +13,17 @@ static int readings[WINDOW_SIZE];
 /**
  * @brief Initializes the ADC module.
  */
-int adc_init();
+void adc_init();
 
 /**
  * @brief Reads from the ADC module.
+ * @return The value read from the ADC module.
  */
 uint16_t adc_read();
 
 /**
  * @brief Filters the measurement.
+ * @return A filtered value read from the ADC module.
 */
 uint16_t ma_read();
 #endif /*ADC_H*/

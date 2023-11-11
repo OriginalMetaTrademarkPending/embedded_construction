@@ -40,7 +40,7 @@ void motor_init();
 
 /**
  * @brief Start motor conversion.
- * @returns The value read by the encoder.
+ * @returns The encoder value read.
 */
 int16_t motor_read();
 
@@ -58,11 +58,14 @@ void encoder_calibrate();
  * @brief Maps the joystick values to the encoder values for the motor.
  *
  * @note This function is necessary in order to map the joystick values to the encoder values.
+ * @param[in] pos The position of the joystick received from node 1.
+ * @return The joystick position converted to encoder value.
 */
 uint16_t joy_map(uint8_t pos);
 
 /**
  * @brief Runs a moving average filter on the encoder.
+ * @return The filtered value of the encoder.
 */
 int16_t encoder_ma_filter();
 

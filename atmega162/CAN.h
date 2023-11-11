@@ -17,18 +17,21 @@ typedef struct
 	int8_t data[8];				// Dataframe content
 }CAN_frame;
 
-/*
+/**
  * @brief Initializes the CAN module.
+ * @param[in] mode The mode to set the CAN module to. Should be set to either MODE_LOOPBACK or MODE_NORMAL.
  */
-int CAN_init(uint8_t mode);
+void CAN_init(uint8_t mode);
 
 /**
  * @brief Sends a dataframe over the CAN network.
+ * @param[in] frame CAN frame to be sent over the network.
  */
 void CAN_write(CAN_frame* frame);
 
 /**
  * @brief Receives a dataframe from the CAN network.
+ * @return The received CAN frame.
  */
 CAN_frame CAN_read();
 

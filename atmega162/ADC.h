@@ -26,6 +26,9 @@ ISR(TIMER3_COMPA_vect);
 
 /* Driver for interfacing with the ADC. */
 
+/**
+ * @brief Struct holding the measurements from the ADC.
+*/
 typedef struct
 {
 	int8_t posX_t;
@@ -34,6 +37,9 @@ typedef struct
 	uint8_t slideLeft;
 }pos_t;
 
+/**
+ * @brief Enum holding the direction of the joystick.
+*/
 typedef enum {NEUTRAL=0, LEFT, RIGHT, UP, DOWN}joy_dir;
 
 /**
@@ -90,9 +96,14 @@ void ADC_test(void);
 
 /**
  * @brief Sends joystick data over CAN
+ * @param[in] adc_meas Pointer to the measurement received from the ADC module.
  */
 void ADC_send_data(pos_t *adc_meas);
 
+/**
+ * @brief Subroutine implementing ADC_send_data as an infinite procedure.
+ * @param[in] myubbr The baud rate parameter for the UART module.
+*/
 void ADC_send_subroutine(unsigned long myubbr);
 
 void ADC_game(uint8_t* calib_array);

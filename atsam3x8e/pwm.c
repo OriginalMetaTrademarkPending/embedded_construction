@@ -8,14 +8,9 @@
 #include "sam3x8e.h"
 #include <stdint.h>
 
-int pwm_init()
+void pwm_init()
 {
-	/*TODO:
-	*	Set clock for pwm module.
-	*	Set waveform period.
-	*	Set waveform duty cycle.
-	*/
-	REG_PMC_PCER1 |= PMC_PCER1_PID36; // 
+	REG_PMC_PCER1 |= PMC_PCER1_PID36;
 	REG_PIOC_PDR |= PIO_PDR_P19;
 	REG_PIOC_ABSR |= PIO_ABSR_P19;
 	REG_PWM_CLK = PWM_CLK_PREA(0) | PWM_CLK_DIVA(42);
@@ -23,7 +18,6 @@ int pwm_init()
 	REG_PWM_CPRD5 = 20000;
 	REG_PWM_CDTY5 = 1500;
 	REG_PWM_ENA = PWM_ENA_CHID5;
-	return 0;
 }
 
 void pwm_set_dc(int value)

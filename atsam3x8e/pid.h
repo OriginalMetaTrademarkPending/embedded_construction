@@ -13,16 +13,6 @@
 #include "adc.h"
 
 /**
- * Some notes on the PID driver...
- *
- * Need to use a timer interrupt...how does one even do this...
- * Using a TC module might help
- *	- First initialize the timer for the PID...*
- *	- Set the PMC write protection to false and enable the peripheral clk for TC0
- *	- Configure the TC module (look at the datasheet.
- *	- */
-
-/**
  * @brief Struct containing the PID configuration. It has been initialized as a static variable.
  */
 typedef struct
@@ -35,6 +25,9 @@ typedef struct
 	int16_t err[2];
 }PID_t;
 
+/**
+ * @brief Struct to track number of goals and if a goal was scored in the previous timestep.
+*/
 typedef struct
 {
 	uint8_t goal;	
@@ -44,18 +37,14 @@ typedef struct
 
 /**
  * @brief Initializes the PID_regulator controller by setting up the timer interrupt.
+ * @param[in] freq The sampling frequency of the PID controller.
  */
-int pid_init(uint32_t freq);
+void pid_init(uint32_t freq);
 
 /**
  * @brief TC0 interrupt handler.
  */
 void TC0_Handler();
-
-/**
- * @brief pppp.
- */
-void P_REGULATOR();
 
 
 #endif /*PID_H*/

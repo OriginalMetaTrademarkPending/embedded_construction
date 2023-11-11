@@ -6,7 +6,7 @@
 #include <stdio.h>
 #define CAN_BUFFER_SIZE 3
 
-int CAN_init(uint8_t mode)
+void CAN_init(uint8_t mode)
 {
 	MCP2515_init();
 	MCP2515_write(MCP_CANINTE, MCP_NO_INT);		// Interrupts disabled
@@ -15,11 +15,7 @@ int CAN_init(uint8_t mode)
 	MCP2515_write(MCP_CNF2, 0xb1);			// Setting PROPSEG+1 to 2 TQ (PROPSEG to 1) and PS1+1 to 7 TQ (PS1 to 6). BTLMODE is also set to 1.
 	MCP2515_write(MCP_CNF3, 0x05);			// Setting PS2+1 to 6 TQ (PS2 to 5).
 
-	//MCP2515_write(MCP_CNF1, 0x83);			// Setting BRP+1 to 4 (BRP to 3). SJW+1 is set to 4 TQ.
-	//MCP2515_write(MCP_CNF2, 0xb2);			// Setting PROPSEG+1 to 2 TQ (PROPSEG to 1) and PS1+1 to 7 TQ (PS1 to 6). BTLMODE is also set to 1.
-	//MCP2515_write(MCP_CNF3, 0x05);			// Setting PS2+1 to 6 TQ (PS2 to 5).
 	MCP2515_write(MCP_CANCTRL, mode);
-	return 0;
 }
 
 void CAN_write(CAN_frame *frame)

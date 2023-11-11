@@ -7,12 +7,13 @@
 #include "timer.h"
 
 /**
- * Initializes the DAC Controller module.
+ * @brief Initializes the DAC Controller module.
  */
-int dac_init(void);
+void dac_init(void);
 
 /**
- * Writes to the DAC module.
+ * @brief Writes to the DAC module.
+ * @param[in] data The value to be written to the DAC.
 */
 void dac_write(uint16_t data);
 
