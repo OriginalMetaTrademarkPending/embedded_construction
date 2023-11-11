@@ -72,21 +72,8 @@ int main()
         //Write the x-value from the joystick
         // servo_write(joy_stick_position.posX_t);
         
-        /*uint16_t adc_val = ma_read();
-        // printf("ADC value: %u\n\r", adc_val);
-        if(adc_val < 3500){
-            if(goal == false)
-            {
-                goal_count++;
-                goal = true;
-            }
-        }
-        else
-        {
-            goal = false;
-        }
 
         // printf("Current Score: %u\n\r", goal_count);
     }
-    */
+    
 }

@@ -18,6 +18,11 @@
 #define SLIDER_MIN 0
 #define ADC_MAX 255
 #define ADC_MIN 0
+#define GAME_TIME_ITERATIONS 294912000UL
+
+extern int ticks_passed;
+
+ISR(TIMER3_COMPA_vect);
 
 /* Driver for interfacing with the ADC. */
 
@@ -58,7 +63,7 @@ void ADC_calibrate(uint8_t* calib_array);
  *
  * @returns The position of the X and Y coordinates, as a struct pos_t.
  */
-pos_t meas_map(uint8_t* calib_array);
+pos_t pos_read(uint8_t* calib_array);
 
 /**
  * @brief Reads the direction of the joystick.
@@ -89,4 +94,9 @@ void ADC_test(void);
 void ADC_send_data(pos_t *adc_meas);
 
 void ADC_send_subroutine(unsigned long myubbr);
+
+void ADC_game(uint8_t* calib_array);
+
+pos_t pos_read(uint8_t* calib_array);
+
 #endif /*ADC_H*/

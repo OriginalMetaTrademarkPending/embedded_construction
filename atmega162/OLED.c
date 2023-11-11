@@ -3,7 +3,6 @@
 #include "fonts.h"
 #include <stdint.h>
 #include <avr/pgmspace.h>
-#include <string.h>
 
 void write_c(char command)
 {
@@ -122,18 +121,26 @@ void OLED_clear_columns(uint8_t start, uint8_t end)
 	}
 }
 
-void OLED_home(int state)
+void OLED_home_screen(int state)
 {
 	OLED_goto_pos(1, 32);
 	OLED_printf("PING PONG");
 	OLED_goto_pos(3, 10);
 	OLED_printf("Start");
 	OLED_goto_pos(4, 10);
-	OLED_printf("Highscores");
-	OLED_goto_pos(5, 10);
-	OLED_printf("Settings");
-	OLED_goto_pos(6, 10);
-	OLED_printf("Quit");
+	OLED_printf("Calibrate");
+}
+
+void OLED_calibrate_screen()
+{
+	OLED_goto_pos(1, 32);
+	OLED_printf("CALIBRATE");
+}
+
+void OLED_game_running()
+{
+	OLED_goto_pos(1, 32);
+	OLED_printf("Game running");
 }
 
 void OLED_settings(int state)
@@ -151,18 +158,13 @@ void OLED_settings(int state)
 
 }
 
-void OLED_highscores(int state, uint8_t* scores)
+void OLED_highscores_screen(uint8_t* scores)
 {
+
 	OLED_goto_pos(1, 32);
-	OLED_printf("HIGHSCORES");
+	OLED_printf("Score:");
 	OLED_goto_pos(3, 10);
-	OLED_printf("Placeholder 1");
-	OLED_goto_pos(4, 10);
-	OLED_printf("Placeholder 2");
-	OLED_goto_pos(5, 10);
-	OLED_printf("Placeholder 3");
-	OLED_goto_pos(6, 10);
-	OLED_printf("Back");
+	OLED_printf(scores);
 }
 
 void OLED_test(void)
@@ -179,7 +181,7 @@ void OLED_test(void)
 		if(dirJoy==UP){
 			selector -= 1;
 			if(selector < 1){
-				selector=4;
+				selector=2;
 			}
 			OLED_clear_columns(0, 10);
 			OLED_goto_pos(selector+2, 0);
@@ -187,13 +189,13 @@ void OLED_test(void)
 		}
 		else if (dirJoy==DOWN) {
 			selector += 1;
-			if (selector>4) {
+			if (selector>2) {
 				selector = 1;
 			}
 			OLED_clear_columns(0, 10);
 			OLED_goto_pos(selector+2, 0);
 			OLED_printf_char('>');
 		}
-		OLED_home(selector);
+		OLED_home_screen(selector);
 	}
 }

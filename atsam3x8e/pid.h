@@ -10,6 +10,7 @@
 #include "can_controller.h"
 #include "motor.h"
 #include "solenoid.h"
+#include "adc.h"
 
 /**
  * Some notes on the PID driver...
@@ -36,7 +37,7 @@ typedef struct
 
 typedef struct
 {
-	bool goal;	
+	uint8_t goal;	
 	uint16_t goal_count;
 
 }goal_params;

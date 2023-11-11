@@ -76,7 +76,7 @@ void OLED_clear_columns(uint8_t start, uint8_t end);
 /**
  * @brief The home menu for the game.
  */
-void OLED_home(int state);
+void OLED_home_screen(int state);
 
 /**
  * @brief The settings menu for the game.
@@ -86,6 +86,20 @@ void OLED_settings(int state);
 /**
  * @brief The highscores menu for the game.
  */
-void OLED_highscores(int state, uint8_t* scores);
+void OLED_highscores_screen(uint8_t* scores);
 
+/**
+ * @brief The screen for when the joystick is calibrating.
+ */
+void OLED_calibrate_screen();
+
+/**
+ * @brief The screen for when the game is running.
+ */
+void OLED_game_running();
+
+/**
+ * @brief Tests the functionality of the OLED screen.
+*/
+void OLED_test();
 #endif /*OLED_H*/

@@ -4,10 +4,18 @@
 #include "UART.h"
 #include "OLED.h"
 #include <stdint.h>
+#include "STATEMACHINE.h"
 
+int ticks_passed = 0;
+
+ISR(TIMER3_COMPA_vect)
+{
+	ticks_passed++;
+}
 
 void ADC_init()
 {
+	cli();
 	XMEM_init();
 	DDRD |= (1<<PD4);
 	DDRB &= ~(1<<PB2);
@@ -16,6 +24,7 @@ void ADC_init()
 	TCCR3A |= (1<<COM3A1 | 1<<WGM31);
 	TCCR3B &= ~(1<<WGM33 | 0b111<<CS30);
 	TCCR3B |= (1<<WGM32 | 1<<WGM33 | 0b01 << CS30);
+	ETIMSK |= (1<<OCIE3A);
 	ICR3 = 20;
 	while(TCNT3 < 10);
 	OCR3A = 10;
@@ -104,6 +113,7 @@ void ADC_calibrate(uint8_t* calib_array)
 			calib_array[3] = maxY;
 		}
 	}
+	//printf("Finished calibrating.\n\r");
 }
 
 pos_t pos_read(uint8_t* calib_array)
@@ -154,13 +164,13 @@ pos_t pos_read(uint8_t* calib_array)
 
 joy_dir dir_read(pos_t joy_pos)
 {
-	if(abs(joy_pos.posX_t) > abs(joy_pos.posY_t))
+	if(abs(50-joy_pos.posX_t) > abs(50-joy_pos.posY_t))
 	{
-		if(joy_pos.posX_t >= 20)
+		if(joy_pos.posX_t >= 75)
 		{
 			return RIGHT;
 		}
-		else if(joy_pos.posX_t <= -20)
+		else if(joy_pos.posX_t <= 25)
 		{
 			return LEFT;
 		}
@@ -170,11 +180,11 @@ joy_dir dir_read(pos_t joy_pos)
 		}
 	}else
 	{
-		if(joy_pos.posY_t >= 20)
+		if(joy_pos.posY_t >= 75)
 		{
 			return UP;
 		}
-		else if(joy_pos.posY_t <= -20)
+		else if(joy_pos.posY_t <= 25)
 		{
 			return DOWN;
 		}
@@ -259,4 +269,18 @@ void ADC_send_subroutine(unsigned long myubbr)
 		adc_meas = pos_read(calib_array);
 		ADC_send_data(&adc_meas);
 	}
+}
+
+void ADC_game(uint8_t *calib_array)
+{
+	CAN_init(MODE_NORMAL);
+	pos_t adc_meas;
+	//sei();
+	while(!(PINB & (1<<PB3))) // TODO: Make a set aomunt of time in which this function runs
+		{
+			adc_meas = pos_read(calib_array);
+			ADC_send_data(&adc_meas);
+		}
+	///cli();
+	fsm_transition_to(STATE_GAME_OVER, calib_array);
 }

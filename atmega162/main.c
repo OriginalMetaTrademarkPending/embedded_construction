@@ -18,6 +18,8 @@
 #include "fonts.h"
 #include "MCP2515.h"
 #include "CAN.h"
+#include "STATEMACHINE.h"
+#include "MENU.h"
 #define FOSC 4915200UL
 #define BAUD 9600UL
 #define MYUBBR ((FOSC/(16*BAUD))-1)
@@ -26,6 +28,16 @@
 
 int main(void)
 {
+	USART_Init(MYUBBR);
+	XMEM_init();
+	OLED_init();
+	//SRAM_test();
+	ADC_init();
+	uint8_t calib_array[4];
+	ADC_calibrate(calib_array);
+
+	//OLED_test();
+	fsm_transition_to(STATE_MENU, calib_array);
 //	USART_Init(MYUBBR);
 //	ADC_init();
 //	uint8_t result[4];
@@ -48,6 +60,5 @@ int main(void)
 //		}
 //		_delay_ms(500);
 //	}
-	ADC_send_subroutine(MYUBBR);
 	return EXIT_SUCCESS;
 }

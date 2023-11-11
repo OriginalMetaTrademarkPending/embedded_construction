@@ -15,7 +15,7 @@ int pwm_init()
 	*	Set waveform period.
 	*	Set waveform duty cycle.
 	*/
-	REG_PMC_PCER1 |= PMC_PCER1_PID36;
+	REG_PMC_PCER1 |= PMC_PCER1_PID36; // 
 	REG_PIOC_PDR |= PIO_PDR_P19;
 	REG_PIOC_ABSR |= PIO_ABSR_P19;
 	REG_PWM_CLK = PWM_CLK_PREA(0) | PWM_CLK_DIVA(42);

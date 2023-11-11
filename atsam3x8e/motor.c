@@ -49,7 +49,7 @@ int16_t motor_read()
 	PIOD->PIO_SODR |= NOT_RST;
 	PIOD->PIO_SODR = (NOT_OE);
 	int16_t result = (int16_t)(high << 8 | low);
-	printf("Value read from motor: %d\n\r", result);
+	//printf("Value read from motor: %d\n\r", result);
 	return result;
 }
 
