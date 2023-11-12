@@ -27,7 +27,7 @@
  */
 uint8_t can_init_def_tx_rx_mb(uint32_t can_br)
 {
-	return can_init(can_br, 1, 2);
+	return can_init(can_br, 2, 2);
 }
 
 /**

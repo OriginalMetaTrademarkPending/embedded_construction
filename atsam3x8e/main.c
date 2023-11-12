@@ -18,6 +18,8 @@
 #include "dac.h"
 #include "core_cm3.h"
 
+extern CAN_MESSAGE Outgoing_message;
+
 int main()
 {
     SystemInit();
@@ -53,5 +55,7 @@ int main()
     pos_t joy_stick_position;
     pid_init(5000);
     __enable_irq();
-    while (1);
+    while (1){
+        //can_send(&Outgoing_message, 1);
+    };
 }

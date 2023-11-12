@@ -234,7 +234,7 @@ void ADC_send_data(pos_t *adc_meas)
 {
 	joy_dir joystick_direction = dir_read(*adc_meas);
 	CAN_frame joy_data;
-	joy_data.id = 0x0020;
+	joy_data.id = 0x0040;
 	joy_data.frame_length = 5;
 	joy_data.data[0] = adc_meas->posX_t;
 	joy_data.data[1] = adc_meas->posY_t;

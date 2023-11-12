@@ -4,7 +4,6 @@
 PID_t PID_regulator;
 goal_params Goal_structure;
 CAN_MESSAGE Outgoing_message;
-CAN_MESSAGE	Incomming_message;
 
 
 void pid_init(uint32_t freq)
@@ -32,15 +31,14 @@ void pid_init(uint32_t freq)
 	NVIC_EnableIRQ(TC0_IRQn);
 	// Here the TC module must be started.
 	REG_TC0_CCR0 = TC_CCR_CLKEN | TC_CCR_SWTRG;
-	
-	Outgoing_message.id = 0x0040;
+	Outgoing_message.id = 0x0020;
 	Outgoing_message.data_length = 1;
 }
 
 void TC0_Handler()
 {
+	CAN_MESSAGE	Incomming_message;
 	//When the interrupt is called, 1 cycle of the PI controller must be executed.
-
 	can_receive(&Incomming_message, 0);
 	int16_t ref_pos = joy_map(Incomming_message.data[1]);
 	int16_t current_pos = motor_read();
@@ -91,8 +89,7 @@ void TC0_Handler()
 	
 	printf("%d \n\r", Goal_structure.goal_count);
 	Outgoing_message.data[0] = Goal_structure.goal_count;
-	can_send(&Outgoing_message, 0);
-
+	can_send(&Outgoing_message, 1);
 	uint16_t status = TC0->TC_CHANNEL[0].TC_SR;
 	NVIC_ClearPendingIRQ(ID_TC0);
 }
