@@ -95,9 +95,4 @@ void TC0_Handler()
 
 	uint16_t status = TC0->TC_CHANNEL[0].TC_SR;
 	NVIC_ClearPendingIRQ(ID_TC0);
-<<<<<<< HEAD
 }
-=======
-	// The value from this function must be written to the motor.
-}
->>>>>>> Most likely last changes to the driver
