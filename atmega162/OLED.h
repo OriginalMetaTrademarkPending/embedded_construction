@@ -106,7 +106,7 @@ void OLED_settings(int state);
  * @param[in] state The game state.
  * @param[in] scores The high scores array.
  */
-void OLED_highscores_screen(uint8_t* scores);
+void OLED_highscores_screen();
 
 /**
  * @brief The screen for when the joystick is calibrating.
@@ -116,7 +116,7 @@ void OLED_calibrate_screen();
 /**
  * @brief The screen for when the game is running.
  */
-void OLED_game_running();
+void OLED_game_screen();
 
 /**
  * @brief Tests the functionality of the OLED screen.

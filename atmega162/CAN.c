@@ -41,13 +41,13 @@ void CAN_write(CAN_frame *frame)
 CAN_frame CAN_read()
 {
 	CAN_frame result;
-	uint16_t id_low = MCP2515_read(MCP_RXB0SIDL);
-	uint16_t id_high = MCP2515_read(MCP_RXB0SIDH);
+	uint16_t id_low = MCP2515_read(MCP_RXB1SIDL);
+	uint16_t id_high = MCP2515_read(MCP_RXB1SIDH);
 	result.id = (id_high << 8) | (id_low);
-	result.frame_length = MCP2515_read(MCP_RXB0DLC);
+	result.frame_length = MCP2515_read(MCP_RXB1DLC);
 	for(uint8_t i = 0; i < result.frame_length; i++)
 	{
-		result.data[i] = MCP2515_read(MCP_RXB0D0 + i);
+		result.data[i] = MCP2515_read(MCP_RXB1D0 + i);
 	}
 	return result;
 }

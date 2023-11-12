@@ -45,6 +45,4 @@ void pid_init(uint32_t freq);
  * @brief TC0 interrupt handler.
  */
 void TC0_Handler();
-
-
 #endif /*PID_H*/

@@ -3,8 +3,8 @@
 
 PID_t PID_regulator;
 goal_params Goal_structure;
-CAN_MESSAGE Goals_message;
-
+CAN_MESSAGE Outgoing_message;
+CAN_MESSAGE	Incomming_message;
 
 
 void pid_init(uint32_t freq)
@@ -33,18 +33,16 @@ void pid_init(uint32_t freq)
 	// Here the TC module must be started.
 	REG_TC0_CCR0 = TC_CCR_CLKEN | TC_CCR_SWTRG;
 	
-	Goals_message.id = 0x0040;
-	Goals_message.data_length = 1;
-
-	printf("oogabooga 1");
+	Outgoing_message.id = 0x0040;
+	Outgoing_message.data_length = 1;
 }
 
 void TC0_Handler()
 {
 	//When the interrupt is called, 1 cycle of the PI controller must be executed.
-	CAN_MESSAGE msg;
-	can_receive(&msg, 0);
-	int16_t ref_pos = joy_map(msg.data[1]);
+
+	can_receive(&Incomming_message, 0);
+	int16_t ref_pos = joy_map(Incomming_message.data[1]);
 	int16_t current_pos = motor_read();
 	uint16_t IR_sensor_val = ma_read();
 	printf("Value read from ma_read: %u \n\r", IR_sensor_val);
@@ -55,7 +53,7 @@ void TC0_Handler()
 	PID_regulator.error_sum += PID_regulator.err[0];
 	int16_t err_deriv = PID_regulator.err[0] - PID_regulator.err[1];
 	int16_t u = (int16_t)((PID_regulator.Kp*PID_regulator.err[0]) + (PID_regulator.Ki*PID_regulator.T*PID_regulator.error_sum)+ (PID_regulator.Kd/PID_regulator.T*(err_deriv)));
-	solenoid_run_button(msg.data[4]);
+	solenoid_run_button(Incomming_message.data[4]);
 	if(abs(u) < 0.5)
 	{
 		PIOD->PIO_CODR = EN;
@@ -72,7 +70,8 @@ void TC0_Handler()
 		PIOD->PIO_SODR = DIR;
 	}
 	dac_write(abs(u)*1000);
-	servo_write(msg.data[3]);
+	//printf("Written to motor: %d\n\r", abs(u));
+	servo_write(Incomming_message.data[3]);
 
 
 	// If the sensor has been crossed, increment the goal counter
@@ -89,10 +88,16 @@ void TC0_Handler()
     {
         Goal_structure.goal = 0;
     }
+	
 	printf("%d \n\r", Goal_structure.goal_count);
-	Goals_message.data[0] = Goal_structure.goal_count;
-	can_send(&Goals_message, 1);
+	Outgoing_message.data[0] = Goal_structure.goal_count;
+	can_send(&Outgoing_message, 0);
 
 	uint16_t status = TC0->TC_CHANNEL[0].TC_SR;
 	NVIC_ClearPendingIRQ(ID_TC0);
+<<<<<<< HEAD
 }
+=======
+	// The value from this function must be written to the motor.
+}
+>>>>>>> Most likely last changes to the driver

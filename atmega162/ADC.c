@@ -275,11 +275,10 @@ void ADC_game(uint8_t *calib_array)
 	CAN_init(MODE_NORMAL);
 	pos_t adc_meas;
 	//sei();
-	while(!(PINB & (1<<PB3))) // TODO: Make a set aomunt of time in which this function runs
+	while(!(PINB & (1<<PB1))) // TODO: Make a set aomunt of time in which this function runs
 		{
 			adc_meas = pos_read(calib_array);
 			ADC_send_data(&adc_meas);
 		}
 	///cli();
-	fsm_transition_to(STATE_GAME_OVER, calib_array);
 }

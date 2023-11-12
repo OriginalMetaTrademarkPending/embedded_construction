@@ -137,7 +137,7 @@ void OLED_calibrate_screen()
 	OLED_printf("CALIBRATE");
 }
 
-void OLED_game_running()
+void OLED_game_screen()
 {
 	OLED_goto_pos(1, 32);
 	OLED_printf("Game running");
@@ -158,13 +158,12 @@ void OLED_settings(int state)
 
 }
 
-void OLED_highscores_screen(uint8_t* scores)
+void OLED_highscores_screen()
 {
-
 	OLED_goto_pos(1, 32);
 	OLED_printf("Score:");
 	OLED_goto_pos(3, 10);
-	OLED_printf(scores);
+	OLED_printf("2");
 }
 
 void OLED_test(void)
