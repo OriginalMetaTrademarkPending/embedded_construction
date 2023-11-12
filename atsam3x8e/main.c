@@ -43,7 +43,6 @@ int main()
     // Setting the servo position in %-s.
     NVIC_SetPriority(CAN0_IRQn, 1);
     NVIC_SetPriority(TC0_IRQn, 2);
-    pwm_init();
     servo_init();
     adc_init();
     dac_init();
